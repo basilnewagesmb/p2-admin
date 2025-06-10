@@ -17,6 +17,9 @@ import {
   LayoutDashboard,
   LogOut,
   User2,
+  Logs,
+  ReceiptText,
+  CircleCheckBig,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -47,6 +50,21 @@ const items = [
     title: "Users",
     url: "/users",
     icon: User2,
+  },
+  {
+    title: "Logs",
+    url: "/logs",
+    icon: Logs,
+  },
+  {
+    title: "Receipts",
+    url: "/receipts",
+    icon: ReceiptText,
+  },
+  {
+    title: "Task Types",
+    url: "/task-types",
+    icon: CircleCheckBig,
   },
 ];
 
@@ -90,16 +108,17 @@ export function AppSidebar({ session }: any) {
   return (
     <Sidebar>
       <SidebarHeader>
-        <div className="flex justify-center items-center gap-1 m-1 my-3">
+        <div className="flex justify-start items-center gap-1 m-1 my-3">
           <Link href={"/dashboard"}>
             <Image
               alt="travel"
-              width={160}
-              height={160}
-              className="w-160  mx-2"
+              width={100}
+              height={100}
+              className="w-10 h-6 mx-2"
               src={"/images/LogoWrapper.png"}
             />
           </Link>
+          <p className="font-semibold ">P2 Contracting</p>
         </div>
       </SidebarHeader>
       <Divider />
@@ -116,7 +135,7 @@ export function AppSidebar({ session }: any) {
                     isActive={pathname === item.url}
                   >
                     <Link href={item.url}>
-                      <item.icon fill="white" />
+                      <item.icon />
                       <span>{item.title}</span>{" "}
                     </Link>
                   </SidebarMenuButton>

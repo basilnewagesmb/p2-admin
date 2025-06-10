@@ -122,7 +122,7 @@ export default async function UserProfile({
         <CardBody className="p-0">
           <div className="flex flex-col xl:flex-row w-full">
             {/* Left Profile Section */}
-            <div className="w-full xl:max-w-sm p-6 xl:p-8">
+            <div className="w-80 xl:max-w-sm p-6 xl:p-8">
               {/* Profile Header */}
               <div className="text-center mb-8">
                 <div className="relative inline-block mb-4">

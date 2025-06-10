@@ -67,13 +67,15 @@ export default async function Users({ searchParams }: ISearchParams) {
             {users.map((user: any) => (
               <TableRow key={user.id}>
                 <TableCell>
-                  <User
-                    avatarProps={{
-                      src: user?.avatar,
-                    }}
-                    description={user?.email}
-                    name={user?.name || "Unknown user"}
-                  />
+                  <Link href={`/users/${user?.uid}`}>
+                    <User
+                      avatarProps={{
+                        src: user?.avatar,
+                      }}
+                      description={user?.email}
+                      name={user?.name || "Unknown user"}
+                    />
+                  </Link>
                 </TableCell>
                 <TableCell>
                   {/* ({user?.phone_code})  */}
