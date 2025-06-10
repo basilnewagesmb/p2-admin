@@ -3,6 +3,8 @@ import { Divider } from "@heroui/divider";
 import { Link } from "@heroui/link";
 import { User } from "@heroui/user";
 import { Avatar } from "@heroui/avatar";
+import { Button } from "@heroui/button";
+import { Chip } from "@heroui/chip";
 import {
   Phone,
   Mail,
@@ -14,6 +16,12 @@ import {
   CalendarDays,
   Clock,
   Badge,
+  Check,
+  Trash2,
+  Ban,
+  UserCheck,
+  AlertCircle,
+  CheckCircle,
 } from "lucide-react";
 
 import React from "react";
@@ -23,11 +31,16 @@ import { ChipProps } from "@heroui/chip";
 import { getUserByUid } from "@/actions/user.action";
 import { formatPhoneNumber } from "@/lib/utils";
 import LogResTab from "../(components)/LogResTab";
+import { confirmationToast, errorToast, successToast } from "@/lib/toaster";
+import ActionButtons from "../(components)/ActionButtons";
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   active: "success",
   paused: "danger",
   vacation: "warning",
+  approved: "success",
+  pending: "warning",
+  blocked: "danger",
 };
 
 type User = (typeof users)[0];
@@ -97,13 +110,19 @@ export default async function UserProfile({
     });
   };
 
+  // Action handlers (you'll need to implement these functions)
+
+  const getUserStatusColor = (status: string) => {
+    return statusColorMap[status] || "default";
+  };
+
   return (
     <div className="flex flex-col w-full h-full p-4 lg:p-6">
       <Card className="w-full shadow-xl border-0 bg-gradient-to-br to-default-50">
         <CardBody className="p-0">
           <div className="flex flex-col xl:flex-row w-full">
             {/* Left Profile Section */}
-            <div className="w-full xl:max-w-sm  p-6 xl:p-8">
+            <div className="w-full xl:max-w-sm p-6 xl:p-8">
               {/* Profile Header */}
               <div className="text-center mb-8">
                 <div className="relative inline-block mb-4">
@@ -112,6 +131,19 @@ export default async function UserProfile({
                     className="w-24 h-24 text-large ring-4 ring-white shadow-lg"
                     name={user?.name}
                   />
+                  {/* Status Badge */}
+                  {user?.status && (
+                    <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2">
+                      <Chip
+                        size="sm"
+                        variant="flat"
+                        color={getUserStatusColor(user.status)}
+                        className="capitalize"
+                      >
+                        {user.status}
+                      </Chip>
+                    </div>
+                  )}
                 </div>
                 <h2 className="text-xl font-bold text-default-900 mb-1">
                   {user?.name}
@@ -124,6 +156,9 @@ export default async function UserProfile({
                   {user?.role}
                 </Link>
               </div>
+
+              {/* Action Buttons */}
+              <ActionButtons user={user} />
 
               {/* Contact Information */}
               <div className="space-y-1 mb-8">
