@@ -1,6 +1,6 @@
 import "@/styles/globals.css";
 
-import { Metadata, Viewport } from "next"
+import { Metadata, Viewport } from "next";
 import { Providers } from "./providers";
 import { SessionProvider } from "next-auth/react";
 import { Toaster as SonnerToast } from "@/components/ui/sonner";
@@ -34,7 +34,6 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-
   return (
     <html suppressHydrationWarning lang="en">
       <head />
@@ -46,7 +45,9 @@ export default async function RootLayout({
       >
         <SessionProvider>
           <HeroUIProvider>
-            <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
+            <Providers
+              themeProps={{ attribute: "class", defaultTheme: "dark" }}
+            >
               <div className="relative flex flex-col h-screen">
                 <Toaster position="top-center" />
                 <SonnerToast
