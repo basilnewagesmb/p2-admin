@@ -3,8 +3,8 @@
 import { useState } from "react";
 import { MapPin, Clock } from "lucide-react";
 import Image from "next/image";
-import Receipts from "../../receipts/page";
-import Logs from "../../logs/page";
+import Logs from "../../logs/(components)/logs";
+import Receipts from "../../receipts/(components)/receipts";
 
 export default function LogResTab() {
   const [activeTab, setActiveTab] = useState("logs");
