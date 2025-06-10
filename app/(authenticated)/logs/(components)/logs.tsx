@@ -28,12 +28,6 @@ import {
 } from "@heroui/modal";
 import { Button } from "@heroui/button";
 
-const statusColorMap: Record<string, ChipProps["color"]> = {
-  active: "success",
-  paused: "danger",
-  warning: "warning",
-};
-
 interface ISearchParams {
   searchParams: {
     page: number;
