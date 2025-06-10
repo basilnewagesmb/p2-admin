@@ -28,7 +28,7 @@ export const viewport: Viewport = {
     { media: "(prefers-color-scheme: dark)", color: "black" },
   ],
 };
-
+// This is the root layout for the application, wrapping all pages and components
 export default async function RootLayout({
   children,
 }: {
