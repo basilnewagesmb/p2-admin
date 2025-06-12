@@ -51,6 +51,7 @@ const columns = [
   { name: "Date", uid: "date" },
   { name: "Amount", uid: "amount" },
   { name: "Receipt", uid: "image" },
+  { name: "Actions", uid: "actions" },
 ];
 
 const receiptsData = [
@@ -157,6 +158,73 @@ export default function Receipts({
     setIsModalOpen(false);
     setSelectedReceipt(null);
   };
+
+  const handlePrintReceipt = (receipt: Receipt) => {
+    const printWindow = window.open("", "_blank");
+    if (!printWindow) return;
+
+    const printContent = `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>Receipt - ${receipt.item}</title>
+          <style>
+            body { font-family: Arial, sans-serif; margin: 20px; }
+            .receipt-header { text-align: center; margin-bottom: 30px; }
+            .receipt-details { margin: 20px 0; }
+            .detail-row { display: flex; justify-content: space-between; margin: 10px 0; }
+            .detail-label { font-weight: bold; }
+            .amount { font-size: 1.2em; font-weight: bold; }
+            .receipt-image { text-align: center; margin: 20px 0; }
+            .receipt-image img { max-width: 300px; height: auto; }
+            @media print {
+              body { margin: 0; }
+            }
+          </style>
+        </head>
+        <body>
+          <div class="receipt-header">
+            <h1>Receipt</h1>
+            <h2>${receipt.company}</h2>
+          </div>
+          
+          <div class="receipt-details">
+            <div class="detail-row">
+              <span class="detail-label">Customer:</span>
+              <span>${receipt.user.name}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Email:</span>
+              <span>${receipt.user.email}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Item:</span>
+              <span>${receipt.item}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Date:</span>
+              <span>${receipt.date}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Amount:</span>
+              <span class="amount">${receipt.amount}</span>
+            </div>
+          </div>
+          
+          <div class="receipt-image">
+            <img src="${receipt.image}" alt="Receipt Image" />
+          </div>
+        </body>
+      </html>
+    `;
+
+    printWindow.document.write(printContent);
+    printWindow.document.close();
+    printWindow.focus();
+    printWindow.print();
+    printWindow.close();
+  };
+
   return (
     <div className={`flex flex-col gap-6 ${!detailPage && " px-4 "} py-4`}>
       {!detailPage && <SearchableHeader name="Receipts " />}
@@ -194,6 +262,15 @@ export default function Receipts({
                           className="rounded-md object-cover cursor-pointer hover:scale-105 transition-transform"
                         />
                       </div>
+                    ) : column.uid === "actions" ? (
+                      <Button
+                        size="sm"
+                        color="primary"
+                        variant="solid"
+                        onPress={() => handlePrintReceipt(item)}
+                      >
+                        Print Receipt
+                      </Button>
                     ) : (
                       (() => {
                         switch (column.uid) {

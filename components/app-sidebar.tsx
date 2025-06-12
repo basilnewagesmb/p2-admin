@@ -20,6 +20,7 @@ import {
   Logs,
   ReceiptText,
   CircleCheckBig,
+  FolderPen,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -60,6 +61,11 @@ const items = [
     title: "Receipts",
     url: "/receipts",
     icon: ReceiptText,
+  },
+  {
+    title: "Job Names",
+    url: "/job-names",
+    icon: FolderPen,
   },
   {
     title: "Task Types",

@@ -23,7 +23,7 @@ import { PaginationClient } from "@/components/ui/PaginationClient";
 import { Edit, Trash2, Plus, AlertTriangle } from "lucide-react";
 
 const columns = [
-  { name: "Task Type", uid: "name" },
+  { name: "Job Name", uid: "name" },
   { name: "Description", uid: "description" },
   { name: "Status", uid: "status" },
   { name: "Created Date", uid: "createdDate" },
@@ -33,87 +33,94 @@ const columns = [
 const initialTaskTypes = [
   {
     id: 1,
-    name: "Painting",
-    description: "All painting services including interior and exterior.",
+    name: "Tapville",
+    description: "Tapville project and related services.",
     status: "active",
     createdDate: "10 Jan 2025",
   },
   {
     id: 2,
-    name: "Drywall",
-    description: "Drywall installation, repair, and finishing.",
+    name: "Gristhouse",
+    description: "Gristhouse construction and maintenance.",
     status: "active",
     createdDate: "09 Jan 2025",
   },
   {
     id: 3,
-    name: "Demo",
-    description: "Demolition and removal services.",
+    name: "Edgewood Elementary",
+    description: "Edgewood Elementary school renovations.",
     status: "active",
     createdDate: "08 Jan 2025",
   },
   {
     id: 4,
-    name: "Casework",
-    description: "Custom cabinetry and casework installation.",
+    name: "4800",
+    description: "Project 4800 general contracting.",
     status: "active",
     createdDate: "07 Jan 2025",
   },
   {
     id: 5,
-    name: "Flooring",
-    description: "Flooring installation and repair.",
+    name: "Oakmont Houses",
+    description: "Oakmont Houses residential work.",
     status: "inactive",
     createdDate: "06 Jan 2025",
   },
   {
     id: 6,
-    name: "Bathrooms",
-    description: "Bathroom remodeling and fixture installation.",
+    name: "My Eye Doctor",
+    description: "My Eye Doctor office buildout.",
     status: "active",
     createdDate: "05 Jan 2025",
   },
   {
     id: 7,
-    name: "Concrete",
-    description: "Concrete pouring and finishing services.",
+    name: "Snyder Pharmacy",
+    description: "Snyder Pharmacy construction.",
     status: "active",
     createdDate: "04 Jan 2025",
   },
   {
     id: 8,
-    name: "Doors",
-    description: "Door installation and repair.",
+    name: "NPL",
+    description: "NPL facility improvements.",
     status: "active",
     createdDate: "03 Jan 2025",
   },
   {
     id: 9,
-    name: "Elevator",
-    description: "Elevator installation and maintenance.",
+    name: "MPLX",
+    description: "MPLX project management.",
     status: "active",
     createdDate: "02 Jan 2025",
   },
   {
     id: 10,
-    name: "Extra",
-    description: "Additional or miscellaneous services.",
+    name: "LK Bundt",
+    description: "LK Bundt bakery fit-out.",
     status: "inactive",
     createdDate: "01 Jan 2025",
   },
   {
     id: 11,
-    name: "Landscape",
-    description: "Landscaping and garden maintenance.",
+    name: "Lehman Residence",
+    description: "Lehman Residence remodeling.",
     status: "active",
     createdDate: "31 Dec 2024",
   },
   {
     id: 12,
-    name: "Plumbing",
-    description: "Plumbing installation and repair.",
+    name: "Klueber Residence",
+    description: "Klueber Residence improvements.",
     status: "active",
     createdDate: "30 Dec 2024",
+  },
+  {
+    id: 13,
+    name: "Christian Academy",
+    description: "Christian Academy campus upgrades.",
+    status: "active",
+    createdDate: "29 Dec 2024",
   },
 ];
 
@@ -127,7 +134,7 @@ type TaskType = {
 
 type ModalType = "add" | "edit" | "delete" | null;
 
-export default function TaskTypes() {
+export default function JobNames() {
   const [taskTypes, setTaskTypes] = useState<TaskType[]>(initialTaskTypes);
   const [selectedTaskType, setSelectedTaskType] = useState<TaskType | null>(
     null
@@ -205,13 +212,13 @@ export default function TaskTypes() {
   return (
     <div className="flex flex-col gap-6 px-4 py-4">
       <div className="flex justify-between items-center">
-        <SearchableHeader name="Task Types" onlyLabel={true} />
+        <SearchableHeader name="Job Names" onlyLabel={true} />
         <Button
           color="primary"
           startContent={<Plus size={16} />}
           onPress={() => handleOpenModal("add")}
         >
-          Add Task Type
+          Add Job Name
         </Button>
       </div>
 
@@ -287,14 +294,14 @@ export default function TaskTypes() {
         <ModalContent>
           <ModalHeader className="flex flex-col gap-1">
             <h3 className="text-xl font-semibold">
-              {modalType === "add" ? "Add New Task Type" : "Edit Task Type"}
+              {modalType === "add" ? "Add New Job Name" : "Edit Job Name"}
             </h3>
           </ModalHeader>
           <ModalBody>
             <div className="flex flex-col gap-4">
               <Input
-                label="Task Type Name"
-                placeholder="Enter task type name"
+                label="Job Name"
+                placeholder="Enter job name"
                 value={formData.name}
                 onChange={(e) =>
                   setFormData({ ...formData, name: e.target.value })
@@ -352,7 +359,7 @@ export default function TaskTypes() {
               onPress={handleSubmit}
               isDisabled={!formData.name.trim()}
             >
-              {modalType === "add" ? "Add Task Type" : "Update Task Type"}
+              {modalType === "add" ? "Add Job Name" : "Update Job Name"}
             </Button>
           </ModalFooter>
         </ModalContent>
@@ -374,7 +381,7 @@ export default function TaskTypes() {
           <ModalBody>
             <div className="bg-default-100 dark:bg-default-50 p-4 rounded-lg">
               <p className="text-foreground mb-2">
-                Are you sure you want to delete this task type?
+                Are you sure you want to delete this job name?
               </p>
               {selectedTaskType && (
                 <div className="text-sm text-default-600">
@@ -396,7 +403,7 @@ export default function TaskTypes() {
               Cancel
             </Button>
             <Button color="danger" onPress={handleDelete}>
-              Delete Task Type
+              Delete Job Name
             </Button>
           </ModalFooter>
         </ModalContent>
