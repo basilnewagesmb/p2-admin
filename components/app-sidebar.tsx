@@ -54,8 +54,8 @@ const items = [
     icon: User2,
   },
   {
-    title: "Summery",
-    url: "/summery",
+    title: "Summary",
+    url: "/summary",
     icon: Target,
   },
   {
