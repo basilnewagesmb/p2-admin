@@ -54,6 +54,7 @@ export default function SummeryTable() {
   const [selectedUser, setSelectedUser] = useState<any>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [expandedUsers, setExpandedUsers] = useState<Set<number>>(new Set());
+  const [viewMode, setViewMode] = useState<"logs" | "receipts">("logs");
 
   const columns = [
     { name: "", uid: "expand" }, // Add expand column
@@ -71,6 +72,14 @@ export default function SummeryTable() {
     { name: "Duration", uid: "duration" },
     { name: "Tasks", uid: "tasks" },
     { name: "Location", uid: "location" },
+  ];
+
+  const receiptColumns = [
+    { name: "Date", uid: "date" },
+    { name: "Receipt No", uid: "receiptNo" },
+    { name: "Amount", uid: "amount" },
+    { name: "Category", uid: "category" },
+    { name: "Status", uid: "status" }
   ];
 
   // Sample data with user summaries and their individual logs
@@ -128,6 +137,24 @@ export default function SummeryTable() {
           location: "📍 3614 Ray Court, Laurinburg",
         },
       ],
+      receipts: [
+        {
+          id: 1001,
+          date: "30 Jun 2025",
+          receiptNo: "REC-001",
+          amount: "$150.00",
+          category: "Materials",
+          status: "Approved",
+        },
+        {
+          id: 1002,
+          date: "29 Jun 2025",
+          receiptNo: "REC-002",
+          amount: "$75.50",
+          category: "Tools",
+          status: "Pending",
+        },
+      ],
     },
     {
       id: 2,
@@ -167,6 +194,24 @@ export default function SummeryTable() {
           location: "📍 3614 Ray Court, Laurinburg",
         },
       ],
+      receipts: [
+        {
+          id: 2001,
+          date: "29 Jun 2025",
+          receiptNo: "REC-003",
+          amount: "$100.00",
+          category: "Labor",
+          status: "Approved",
+        },
+        {
+          id: 2002,
+          date: "28 Jun 2025",
+          receiptNo: "REC-004",
+          amount: "$50.00",
+          category: "Materials",
+          status: "Pending",
+        },
+      ],
     },
     {
       id: 3,
@@ -191,6 +236,16 @@ export default function SummeryTable() {
             { name: "Carpentry", hours: "2h 30m" },
           ],
           location: "📍 3614 Ray Court, Laurinburg",
+        },
+      ],
+      receipts: [
+        {
+          id: 3001,
+          date: "28 Jun 2025",
+          receiptNo: "REC-005",
+          amount: "$75.00",
+          category: "Labor",
+          status: "Approved",
         },
       ],
     },
@@ -293,58 +348,122 @@ export default function SummeryTable() {
                       className="p-0 bg-gray-50 dark:bg-gray-900"
                     >
                       <div className="p-4">
-                        <div className="mb-3">
+                        <div className="mb-3 flex justify-between items-center">
                           <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300">
                             Logs for {userSummary.user.name}
                           </h4>
+                          <div className="flex items-center gap-2">
+                            <Button
+                              size="sm"
+                              variant={viewMode === "logs" ? "solid" : "flat"}
+                              color="primary"
+                              onClick={() => setViewMode("logs")}
+                            >
+                              Logs
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant={viewMode === "receipts" ? "solid" : "flat"}
+                              color="primary"
+                              onClick={() => setViewMode("receipts")}
+                            >
+                              Receipts
+                            </Button>
+                          </div>
                         </div>
                         <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
-                          <Table
-                            aria-label={`Logs for ${userSummary.user.name}`}
-                          >
-                            <TableHeader>
-                              <TableRow>
-                                {logColumns.map((column) => (
-                                  <TableCell
-                                    key={column.uid}
-                                    className="font-medium text-xs bg-gray-100 dark:bg-gray-800"
-                                  >
-                                    {column.name}
-                                  </TableCell>
-                                ))}
-                              </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                              {userSummary.logs.map((log) => (
-                                <TableRow key={log.id} className="text-sm">
+                          {viewMode === "logs" ? (
+                            <Table aria-label={`Logs for ${userSummary.user.name}`}>
+                              <TableHeader>
+                                <TableRow>
                                   {logColumns.map((column) => (
                                     <TableCell
                                       key={column.uid}
-                                      className="py-2"
+                                      className="font-medium text-xs bg-gray-100 dark:bg-gray-800"
                                     >
-                                      {column.uid === "tasks" ? (
-                                        <Button
-                                          size="sm"
-                                          variant="flat"
-                                          color="primary"
-                                          onClick={() => handleTasksClick(log)}
-                                        >
-                                          <span className="text-[#FF791A]">
-                                            {log.tasks.length} Tasks
-                                          </span>
-                                        </Button>
-                                      ) : (
-                                        String(
-                                          log[column.uid as keyof typeof log] ??
-                                            ""
-                                        )
-                                      )}
+                                      {column.name}
                                     </TableCell>
                                   ))}
                                 </TableRow>
-                              ))}
-                            </TableBody>
-                          </Table>
+                              </TableHeader>
+                              <TableBody>
+                                {userSummary.logs.map((log) => (
+                                  <TableRow key={log.id} className="text-sm">
+                                    {logColumns.map((column) => (
+                                      <TableCell
+                                        key={column.uid}
+                                        className="py-2"
+                                      >
+                                        {column.uid === "tasks" ? (
+                                          <Button
+                                            size="sm"
+                                            variant="flat"
+                                            color="primary"
+                                            onClick={() => handleTasksClick(log)}
+                                          >
+                                            <span className="text-[#FF791A]">
+                                              {log.tasks.length} Tasks
+                                            </span>
+                                          </Button>
+                                        ) : (
+                                          String(
+                                            log[column.uid as keyof typeof log] ??
+                                              ""
+                                          )
+                                        )}
+                                      </TableCell>
+                                    ))}
+                                  </TableRow>
+                                ))}
+                              </TableBody>
+                            </Table>
+                          ) : (
+                            <Table aria-label={`Receipts for ${userSummary.user.name}`}>
+                              <TableHeader>
+                                <TableRow>
+                                  {receiptColumns.map((column) => (
+                                    <TableCell
+                                      key={column.uid}
+                                      className="font-medium text-xs bg-gray-100 dark:bg-gray-800"
+                                    >
+                                      {column.name}
+                                    </TableCell>
+                                  ))}
+                                </TableRow>
+                              </TableHeader>
+                              <TableBody>
+                                {userSummary.receipts?.map((receipt) => (
+                                  <TableRow key={receipt.id} className="text-sm">
+                                    {receiptColumns.map((column) => (
+                                      <TableCell
+                                        key={column.uid}
+                                        className="py-2"
+                                      >
+                                        {column.uid === "status" ? (
+                                          <Chip
+                                            size="sm"
+                                            variant="flat"
+                                            color={
+                                              receipt.status === "Approved"
+                                                ? "success"
+                                                : "warning"
+                                            }
+                                          >
+                                            {receipt.status}
+                                          </Chip>
+                                        ) : (
+                                          String(
+                                            receipt[column.uid as keyof typeof receipt] ??
+                                              ""
+                                          )
+                                        )}
+                                      </TableCell>
+                                    ))}
+                                  </TableRow>
+                                ))}
+                              </TableBody>
+                            </Table>
+                          )}
                         </div>
                       </div>
                     </TableCell>
