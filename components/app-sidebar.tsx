@@ -21,6 +21,7 @@ import {
   ReceiptText,
   CircleCheckBig,
   FolderPen,
+  Target,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -51,6 +52,11 @@ const items = [
     title: "Users",
     url: "/users",
     icon: User2,
+  },
+  {
+    title: "Summery",
+    url: "/summery",
+    icon: Target,
   },
   {
     title: "Logs",

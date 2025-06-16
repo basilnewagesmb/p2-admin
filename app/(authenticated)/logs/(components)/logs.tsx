@@ -121,7 +121,7 @@ export default function Logs({ detailPage = false }: { detailPage?: boolean }) {
 
   return (
     <div className={`flex flex-col gap-6 ${!detailPage && " px-4 "} py-4`}>
-      {!detailPage && <SearchableHeader name="Users" />}
+      {!detailPage && <SearchableHeader name="Logs" />}
       <div className="overflow-auto w-full border-1 p-3 rounded-lg">
         <Table aria-label="Recent Logs with User Info">
           <TableHeader>
