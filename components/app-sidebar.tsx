@@ -49,7 +49,7 @@ const items = [
     icon: LayoutDashboard,
   },
   {
-    title: "Users",
+    title: "All Users",
     url: "/users",
     icon: User2,
   },
@@ -59,12 +59,12 @@ const items = [
     icon: Target,
   },
   {
-    title: "Logs",
+    title: "All Log Entries",
     url: "/logs",
     icon: Logs,
   },
   {
-    title: "Receipts",
+    title: "All Receitps",
     url: "/receipts",
     icon: ReceiptText,
   },

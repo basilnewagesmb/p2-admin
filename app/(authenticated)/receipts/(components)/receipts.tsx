@@ -45,6 +45,7 @@ const stats = [
 ];
 
 const columns = [
+  { name: "S.No", uid: "serial" },
   { name: "User", uid: "user" },
   { name: "Item", uid: "item" },
   { name: "Company", uid: "company" },
@@ -227,7 +228,7 @@ export default function Receipts({
 
   return (
     <div className={`flex flex-col gap-6 ${!detailPage && " px-4 "} py-4`}>
-      {!detailPage && <SearchableHeader name="Receipts " />}
+      {!detailPage && <SearchableHeader name="All Receitps " />}
       <Table>
         <TableHeader>
           {columns
@@ -237,13 +238,15 @@ export default function Receipts({
             ))}
         </TableHeader>
         <TableBody>
-          {receiptsData.map((item) => (
+          {receiptsData.map((item, index) => (
             <TableRow key={item.id}>
               {columns
                 .filter((column) => !(detailPage && column.uid === "user"))
                 .map((column) => (
                   <TableCell key={column.uid}>
-                    {column.uid === "user" ? (
+                    {column.uid === "serial" ? (
+                      index + 1
+                    ) : column.uid === "user" ? (
                       <User
                         name={item.user.name}
                         description={item.user.email}

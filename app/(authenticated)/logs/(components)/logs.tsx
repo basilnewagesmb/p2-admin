@@ -48,6 +48,7 @@ export default function Logs({ detailPage = false }: { detailPage?: boolean }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const columns = [
+    { name: "S.No", uid: "sno" },
     { name: "User", uid: "user" },
     { name: "Date", uid: "date" },
     { name: "In Time", uid: "in" },
@@ -121,7 +122,7 @@ export default function Logs({ detailPage = false }: { detailPage?: boolean }) {
 
   return (
     <div className={`flex flex-col gap-6 ${!detailPage && " px-4 "} py-4`}>
-      {!detailPage && <SearchableHeader name="Logs" />}
+      {!detailPage && <SearchableHeader name="All Log Entries" />}
       <div className="overflow-auto w-full border-1 p-3 rounded-lg">
         <Table aria-label="Recent Logs with User Info">
           <TableHeader>
@@ -136,13 +137,15 @@ export default function Logs({ detailPage = false }: { detailPage?: boolean }) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {logs.map((item) => (
+            {logs.map((item, index) => (
               <TableRow key={item.id}>
                 {columns
                   .filter((column) => !(detailPage && column.uid === "user"))
                   .map((column) => (
                     <TableCell key={column.uid}>
-                      {column.uid === "user" ? (
+                      {column.uid === "sno" ? (
+                        index + 1
+                      ) : column.uid === "user" ? (
                         <User
                           name={item.user.name}
                           description={item.user.email}

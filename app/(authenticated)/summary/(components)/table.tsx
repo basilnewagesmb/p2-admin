@@ -27,6 +27,9 @@ import {
   ModalFooter,
 } from "@heroui/modal";
 import { Button } from "@heroui/button";
+
+import { Select, SelectItem } from "@heroui/select";
+
 import { DateRangePicker } from "@/components/ui/DateRangePicker";
 import {
   ArrowBigRight,
@@ -55,17 +58,22 @@ export default function SummeryTable() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [expandedUsers, setExpandedUsers] = useState<Set<number>>(new Set());
   const [viewMode, setViewMode] = useState<"logs" | "receipts">("logs");
+  const [usernameFilter, setUsernameFilter] = useState("");
 
   const columns = [
-    { name: "", uid: "expand" }, // Add expand column
-    { name: "User", uid: "user" },
-    { name: "Total Days", uid: "totalDays" },
+    { name: "S.No", uid: "sno" },
+    { name: "", uid: "expand" },
+    { name: "Employee Name", uid: "user" },
+    { name: "Email", uid: "email" },
+    { name: "Date Range", uid: "dateRange" },
+    { name: "Worked Days", uid: "totalDays" },
     { name: "Total Hours", uid: "totalHours" },
-    { name: "Total Tasks", uid: "totalTasks" },
+    { name: "Total Receipt Amount", uid: "totalReceiptAmount" },
     { name: "Actions", uid: "actions" },
   ];
 
   const logColumns = [
+    { name: "S.No", uid: "sno" },
     { name: "Date", uid: "date" },
     { name: "In Time", uid: "in" },
     { name: "Out Time", uid: "out" },
@@ -75,6 +83,7 @@ export default function SummeryTable() {
   ];
 
   const receiptColumns = [
+    { name: "S.No", uid: "sno" },
     { name: "Date", uid: "date" },
     { name: "Receipt No", uid: "receiptNo" },
     { name: "Amount", uid: "amount" },
@@ -251,6 +260,11 @@ export default function SummeryTable() {
     },
   ];
 
+  // Filter user summaries based on username
+  const filteredUserSummaries = userSummaries.filter((summary) =>
+    summary.user.name.toLowerCase().includes(usernameFilter.toLowerCase())
+  );
+
   const handleTasksClick = (log: any) => {
     setSelectedUser(log);
     setIsModalOpen(true);
@@ -268,7 +282,18 @@ export default function SummeryTable() {
 
   return (
     <div className={`flex flex-col gap-6 ${" px-4 "} py-4`}>
-      <DateRangePicker name="Summary" />
+      <div className="flex flex-col gap-4">
+        <DateRangePicker name="Summary" />
+        <div className="w-full max-w-xs">
+          <Input
+            type="text"
+            placeholder="Filter by username..."
+            value={usernameFilter}
+            onChange={(e) => setUsernameFilter(e.target.value)}
+            className="w-full"
+          />
+        </div>
+      </div>
       <div className="overflow-auto w-full border-1 p-3 rounded-lg">
         <Table aria-label="User Summary with Expandable Logs">
           <TableHeader>
@@ -281,10 +306,15 @@ export default function SummeryTable() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {userSummaries.map((userSummary) => (
+            {filteredUserSummaries.map((userSummary, index) => (
               <React.Fragment key={userSummary.id}>
                 {/* Main User Row */}
                 <TableRow className="hover:bg-gray-50 dark:hover:bg-gray-800">
+                  <TableCell>
+                    <span className="text-sm text-gray-600 dark:text-gray-400">
+                      {index + 1}
+                    </span>
+                  </TableCell>
                   <TableCell>
                     <Button
                       isIconOnly
@@ -310,6 +340,16 @@ export default function SummeryTable() {
                     />
                   </TableCell>
                   <TableCell>
+                    <span className="text-sm text-gray-600 dark:text-gray-400">
+                      {userSummary.user.email}
+                    </span>
+                  </TableCell>
+                  <TableCell>
+                    <span className="text-sm text-gray-600 dark:text-gray-400">
+                      {userSummary.logs[0]?.date} - {userSummary.logs[userSummary.logs.length - 1]?.date}
+                    </span>
+                  </TableCell>
+                  <TableCell>
                     <Chip size="sm" variant="flat" color="default">
                       {userSummary.totalDays} days
                     </Chip>
@@ -320,9 +360,10 @@ export default function SummeryTable() {
                     </span>
                   </TableCell>
                   <TableCell>
-                    <Chip size="sm" variant="flat" color="primary">
-                      {userSummary.totalTasks} tasks
-                    </Chip>
+                    <span className="font-semibold text-green-600">
+                      ${userSummary.receipts.reduce((total: number, receipt: any) =>
+                        total + parseFloat(receipt.amount.replace('$', '')), 0).toFixed(2)}
+                    </span>
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-2">
@@ -357,6 +398,7 @@ export default function SummeryTable() {
                               size="sm"
                               variant={viewMode === "logs" ? "solid" : "flat"}
                               color="primary"
+                              className="text-white"
                               onClick={() => setViewMode("logs")}
                             >
                               Logs
@@ -364,7 +406,8 @@ export default function SummeryTable() {
                             <Button
                               size="sm"
                               variant={viewMode === "receipts" ? "solid" : "flat"}
-                              color="primary"
+                              color="primary" className="text-white"
+
                               onClick={() => setViewMode("receipts")}
                             >
                               Receipts
@@ -387,9 +430,14 @@ export default function SummeryTable() {
                                 </TableRow>
                               </TableHeader>
                               <TableBody>
-                                {userSummary.logs.map((log) => (
+                                {userSummary.logs.map((log, index) => (
                                   <TableRow key={log.id} className="text-sm">
-                                    {logColumns.map((column) => (
+                                    <TableCell className="py-2">
+                                      <span className="text-sm text-gray-600 dark:text-gray-400">
+                                        {index + 1}
+                                      </span>
+                                    </TableCell>
+                                    {logColumns.slice(1).map((column) => (
                                       <TableCell
                                         key={column.uid}
                                         className="py-2"
@@ -408,7 +456,7 @@ export default function SummeryTable() {
                                         ) : (
                                           String(
                                             log[column.uid as keyof typeof log] ??
-                                              ""
+                                            ""
                                           )
                                         )}
                                       </TableCell>
@@ -432,9 +480,14 @@ export default function SummeryTable() {
                                 </TableRow>
                               </TableHeader>
                               <TableBody>
-                                {userSummary.receipts?.map((receipt) => (
+                                {userSummary.receipts?.map((receipt, index) => (
                                   <TableRow key={receipt.id} className="text-sm">
-                                    {receiptColumns.map((column) => (
+                                    <TableCell className="py-2">
+                                      <span className="text-sm text-gray-600 dark:text-gray-400">
+                                        {index + 1}
+                                      </span>
+                                    </TableCell>
+                                    {receiptColumns.slice(1).map((column) => (
                                       <TableCell
                                         key={column.uid}
                                         className="py-2"
@@ -454,7 +507,7 @@ export default function SummeryTable() {
                                         ) : (
                                           String(
                                             receipt[column.uid as keyof typeof receipt] ??
-                                              ""
+                                            ""
                                           )
                                         )}
                                       </TableCell>

@@ -50,6 +50,7 @@ export default async function Users({ searchParams }: ISearchParams) {
   });
   const users = data?.users || [];
   const tableHeaders = [
+    { name: "S.No", key: "sno", sortable: false },
     { name: "Name", key: "name", sortable: true },
     { name: "Phone", key: "phone", sortable: false },
     { name: "Role", key: "role", sortable: false },
@@ -59,13 +60,14 @@ export default async function Users({ searchParams }: ISearchParams) {
   ];
   return (
     <div className="flex flex-col gap-6 px-4 py-4">
-      <SearchableHeader name="Users" />
+      <SearchableHeader name="All Users" />
       <div className="overflow-auto w-full border-1 p-3 rounded-lg">
         <Table>
           <SortableTableHeader heads={tableHeaders} basePath="/users" />
           <TableBody>
-            {users.map((user: any) => (
+            {users.map((user: any, index: number) => (
               <TableRow key={user.id}>
+                <TableCell>{(page - 1) * limit + index + 1}</TableCell>
                 <TableCell>
                   <Link href={`/users/${user?.uid}`}>
                     <User

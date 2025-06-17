@@ -23,6 +23,7 @@ import { PaginationClient } from "@/components/ui/PaginationClient";
 import { Edit, Trash2, Plus, AlertTriangle } from "lucide-react";
 
 const columns = [
+  { name: "S.No", uid: "serial" },
   { name: "Job Name", uid: "name" },
   { name: "Description", uid: "description" },
   { name: "Status", uid: "status" },
@@ -229,11 +230,13 @@ export default function JobNames() {
           ))}
         </TableHeader>
         <TableBody>
-          {taskTypes.map((item) => (
+          {taskTypes.map((item, index) => (
             <TableRow key={item.id}>
               {columns.map((column) => (
                 <TableCell key={column.uid}>
-                  {column.uid === "name" ? (
+                  {column.uid === "serial" ? (
+                    <div className="text-sm text-default-600">{index + 1}</div>
+                  ) : column.uid === "name" ? (
                     <div className="font-semibold">{item.name}</div>
                   ) : column.uid === "description" ? (
                     <div className="max-w-xs truncate">{item.description}</div>
