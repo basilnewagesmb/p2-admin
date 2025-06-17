@@ -55,6 +55,10 @@ export async function getAllUsers(
         $lte: formatDate(params.to, true),
       };
     }
+    where["role"] = "User";
+    console.log(where);
+    
+    
     queryParams.append("where", JSON.stringify(where));
     const resp: { error: any; data: any } = (await API.Get(
       `user?${queryParams.toString() || ""}`

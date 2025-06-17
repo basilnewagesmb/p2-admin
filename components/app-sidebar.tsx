@@ -53,11 +53,7 @@ const items = [
     url: "/users",
     icon: User2,
   },
-  {
-    title: "Summary",
-    url: "/summary",
-    icon: Target,
-  },
+
   {
     title: "All Log Entries",
     url: "/logs",
@@ -72,6 +68,10 @@ const items = [
     title: "Job Names",
     url: "/job-names",
     icon: FolderPen,
+  }, {
+    title: "Summary Reports",
+    url: "/summary",
+    icon: Target,
   },
   {
     title: "Task Types",
@@ -113,9 +113,9 @@ export function AppSidebar({ session }: any) {
           });
           router.push("/");
         },
-        async onCancel() {},
+        async onCancel() { },
       });
-    } catch (error) {}
+    } catch (error) { }
   };
   return (
     <Sidebar>

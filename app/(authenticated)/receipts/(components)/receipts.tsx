@@ -11,6 +11,10 @@ import {
   ModalBody,
   ModalFooter,
 } from "@heroui/modal";
+import {
+  Select,
+  SelectItem,
+} from "@heroui/select";
 
 import {
   Table,
@@ -22,6 +26,7 @@ import {
 } from "@heroui/table";
 import { SearchableHeader } from "@/components/ui/SearchableHeader";
 import { PaginationClient } from "@/components/ui/PaginationClient";
+import { DateRangePickerComponent } from "@/components/ui/DateRangePicker";
 
 const stats = [
   {
@@ -47,6 +52,8 @@ const stats = [
 const columns = [
   { name: "S.No", uid: "serial" },
   { name: "User", uid: "user" },
+  { name: "Job Name", uid: "jobName" },
+  { name: "Task Type", uid: "taskType" },
   { name: "Item", uid: "item" },
   { name: "Company", uid: "company" },
   { name: "Date", uid: "date" },
@@ -58,6 +65,8 @@ const columns = [
 const receiptsData = [
   {
     id: 1,
+    jobName: "Tapville",
+    taskType: "Painting",
     item: "Shower Set",
     company: "IBD Hardware",
     date: "10 Jan 2025 - 10:30am",
@@ -72,6 +81,8 @@ const receiptsData = [
   },
   {
     id: 2,
+    jobName: "Gristhouse",
+    taskType: "Drywall",
     item: "Wall Bricks",
     company: "IBD Hardware",
     date: "09 Jan 2025 - 2:15pm",
@@ -86,6 +97,8 @@ const receiptsData = [
   },
   {
     id: 3,
+    jobName: "Edgewood Elementary",
+    taskType: "Demo",
     item: "Power Drill Kit",
     company: "Tool Master Pro",
     date: "08 Jan 2025 - 11:45am",
@@ -100,6 +113,8 @@ const receiptsData = [
   },
   {
     id: 4,
+    jobName: "4800",
+    taskType: "Plumbing",
     item: "Pipe and Tap Set",
     company: "Plumbing Solutions",
     date: "07 Jan 2025 - 4:20pm",
@@ -114,6 +129,8 @@ const receiptsData = [
   },
   {
     id: 5,
+    jobName: "Oakmont Houses",
+    taskType: "Painting",
     item: "Paint Supplies",
     company: "ColorWorks Inc",
     date: "06 Jan 2025 - 9:30am",
@@ -130,6 +147,8 @@ const receiptsData = [
 
 type Receipt = {
   id: number;
+  jobName: string;
+  taskType: string;
   item: string;
   company: string;
   date: string;
@@ -149,6 +168,19 @@ export default function Receipts({
 }) {
   const [selectedReceipt, setSelectedReceipt] = useState<Receipt | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedJobName, setSelectedJobName] = useState<string>("");
+  const [selectedTaskType, setSelectedTaskType] = useState<string>("");
+
+  // Get unique job names and task types for filters
+  const uniqueJobNames = Array.from(new Set(receiptsData.map(receipt => receipt.jobName)));
+  const uniqueTaskTypes = Array.from(new Set(receiptsData.map(receipt => receipt.taskType)));
+
+  // Filter receipts based on selected filters
+  const filteredReceipts = receiptsData.filter(receipt => {
+    const matchesJobName = !selectedJobName || receipt.jobName === selectedJobName;
+    const matchesTaskType = !selectedTaskType || receipt.taskType === selectedTaskType;
+    return matchesJobName && matchesTaskType;
+  });
 
   const handleReceiptClick = (receipt: Receipt) => {
     setSelectedReceipt(receipt);
@@ -228,7 +260,45 @@ export default function Receipts({
 
   return (
     <div className={`flex flex-col gap-6 ${!detailPage && " px-4 "} py-4`}>
-      {!detailPage && <SearchableHeader name="All Receitps " />}
+      <div className="flex flex-col gap-4">
+        <DateRangePickerComponent name={!detailPage ? "All Receipts" : ""} />
+        <div className="flex flex-wrap gap-4">
+          <Select
+            label="Filter by Job Name"
+            placeholder="Select Job Name"
+            selectedKeys={selectedJobName ? [selectedJobName] : []}
+            onChange={(e) => setSelectedJobName(e.target.value)}
+            className="max-w-xs"
+          >
+            <SelectItem key="" textValue="">All Jobs</SelectItem>
+            <>
+              {uniqueJobNames.map((jobName) => (
+                <SelectItem key={jobName} textValue={jobName}>
+                  {jobName}
+                </SelectItem>
+              ))}
+            </>
+          </Select>
+
+          <Select
+            label="Filter by Task Type"
+            placeholder="Select Task Type"
+            selectedKeys={selectedTaskType ? [selectedTaskType] : []}
+            onChange={(e) => setSelectedTaskType(e.target.value)}
+            className="max-w-xs"
+          >
+            <SelectItem key="" textValue="">All Tasks</SelectItem>
+            <>
+              {uniqueTaskTypes.map((taskType) => (
+                <SelectItem key={taskType} textValue={taskType}>
+                  {taskType}
+                </SelectItem>
+              ))}
+            </>
+          </Select>
+        </div>
+      </div>
+
       <Table>
         <TableHeader>
           {columns
@@ -238,7 +308,7 @@ export default function Receipts({
             ))}
         </TableHeader>
         <TableBody>
-          {receiptsData.map((item, index) => (
+          {filteredReceipts.map((item, index) => (
             <TableRow key={item.id}>
               {columns
                 .filter((column) => !(detailPage && column.uid === "user"))
@@ -251,34 +321,54 @@ export default function Receipts({
                         name={item.user.name}
                         description={item.user.email}
                         avatarProps={{
-                          radius: "full",
                           src: item.user.avatar,
                         }}
                       />
+                    ) : column.uid === "jobName" ? (
+                      <div className="font-semibold">{item.jobName}</div>
+                    ) : column.uid === "taskType" ? (
+                      <div className="text-sm text-default-600">{item.taskType}</div>
+                    ) : column.uid === "item" ? (
+                      item.item
                     ) : column.uid === "image" ? (
                       <div onClick={() => handleReceiptClick(item)}>
                         <Image
+                          alt="Receipt"
+                          className="object-cover cursor-pointer"
                           src={item.image}
-                          alt={`Receipt for ${item.item}`}
-                          width={50}
-                          height={50}
-                          className="rounded-md object-cover cursor-pointer hover:scale-105 transition-transform"
+                          width={40}
+                          height={40}
                         />
                       </div>
                     ) : column.uid === "actions" ? (
-                      <Button
-                        size="sm"
-                        color="primary"
-                        variant="solid"
-                        onPress={() => handlePrintReceipt(item)}
-                      >
-                        Print Receipt
-                      </Button>
+                      <div className="flex gap-2">
+                        <Button
+                          isIconOnly
+                          size="sm"
+                          variant="light"
+                          color="primary"
+                          onPress={() => handlePrintReceipt(item)}
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <polyline points="6 9 6 2 18 2 18 9" />
+                            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+                            <rect x="6" y="14" width="12" height="8" />
+                          </svg>
+                        </Button>
+                      </div>
                     ) : (
                       (() => {
                         switch (column.uid) {
-                          case "item":
-                            return item.item;
                           case "company":
                             return item.company;
                           case "date":
@@ -286,7 +376,7 @@ export default function Receipts({
                           case "amount":
                             return item.amount;
                           default:
-                            return "";
+                            return null;
                         }
                       })()
                     )}

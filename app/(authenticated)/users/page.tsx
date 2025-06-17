@@ -12,6 +12,9 @@ import { formatPhoneNumber } from "@/lib/utils";
 import { Tooltip } from "@heroui/tooltip";
 import { DeleteIcon, EditIcon, EyeIcon } from "@/components/icons";
 import Link from "next/link";
+import { DateRangePickerComponent } from "@/components/ui/DateRangePicker";
+import { Select, SelectItem } from "@heroui/select";
+import StatusFilterSelect from "./(components)/StatusFilterSelect";
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   active: "success",
@@ -53,14 +56,18 @@ export default async function Users({ searchParams }: ISearchParams) {
     { name: "S.No", key: "sno", sortable: false },
     { name: "Name", key: "name", sortable: true },
     { name: "Phone", key: "phone", sortable: false },
-    { name: "Role", key: "role", sortable: false },
     { name: "Status", key: "status", sortable: false },
     { name: "Created At", key: "created_at", sortable: true },
     { name: "Actions", key: "", sortable: false },
   ];
   return (
     <div className="flex flex-col gap-6 px-4 py-4">
-      <SearchableHeader name="All Users" />
+      <div className="flex flex-col md:flex-row gap-4">
+        <DateRangePickerComponent name="All Users" />
+        <div className="w-full md:w-64">
+          <StatusFilterSelect status={status} />
+        </div>
+      </div>
       <div className="overflow-auto w-full border-1 p-3 rounded-lg">
         <Table>
           <SortableTableHeader heads={tableHeaders} basePath="/users" />
@@ -83,7 +90,6 @@ export default async function Users({ searchParams }: ISearchParams) {
                   {/* ({user?.phone_code})  */}
                   {formatPhoneNumber(user?.phone)}
                 </TableCell>
-                <TableCell>{user?.role}</TableCell>
                 <TableCell>
                   <Chip
                     size="sm"

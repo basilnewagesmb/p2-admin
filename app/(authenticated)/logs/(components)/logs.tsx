@@ -27,6 +27,7 @@ import {
   ModalFooter,
 } from "@heroui/modal";
 import { Button } from "@heroui/button";
+import { DateRangePickerComponent } from "@/components/ui/DateRangePicker";
 
 interface ISearchParams {
   searchParams: {
@@ -71,10 +72,20 @@ export default function Logs({ detailPage = false }: { detailPage?: boolean }) {
       out: "17:00",
       duration: "8h 30m",
       tasks: [
-        { name: "Painting", hours: "3h 00m" },
-        { name: "Electrical Work", hours: "2h 30m" },
-        { name: "Plumbing", hours: "2h 00m" },
-        { name: "Cleaning", hours: "1h 00m" },
+        {
+          jobName: "Tapville",
+          tasks: [
+            { name: "Painting", hours: "3h 00m" },
+            { name: "Electrical Work", hours: "2h 30m" }
+          ]
+        },
+        {
+          jobName: "Gristhouse",
+          tasks: [
+            { name: "Plumbing", hours: "2h 00m" },
+            { name: "Cleaning", hours: "1h 00m" }
+          ]
+        }
       ],
       location: "📍 3614 Ray Court, Laurinburg",
     },
@@ -90,9 +101,19 @@ export default function Logs({ detailPage = false }: { detailPage?: boolean }) {
       out: "17:00",
       duration: "8h 30m",
       tasks: [
-        { name: "Carpentry", hours: "4h 00m" },
-        { name: "Landscaping", hours: "2h 00m" },
-        { name: "Cleaning", hours: "2h 30m" },
+        {
+          jobName: "Edgewood Elementary",
+          tasks: [
+            { name: "Carpentry", hours: "4h 00m" },
+            { name: "Landscaping", hours: "2h 00m" }
+          ]
+        },
+        {
+          jobName: "4800",
+          tasks: [
+            { name: "Cleaning", hours: "2h 30m" }
+          ]
+        }
       ],
       location: "📍 3614 Ray Court, Laurinburg",
     },
@@ -108,9 +129,19 @@ export default function Logs({ detailPage = false }: { detailPage?: boolean }) {
       out: "17:00",
       duration: "8h 30m",
       tasks: [
-        { name: "Electrical Work", hours: "2h 45m" },
-        { name: "Plumbing", hours: "3h 15m" },
-        { name: "Carpentry", hours: "2h 30m" },
+        {
+          jobName: "Oakmont Houses",
+          tasks: [
+            { name: "Electrical Work", hours: "2h 45m" },
+            { name: "Plumbing", hours: "3h 15m" }
+          ]
+        },
+        {
+          jobName: "My Eye Doctor",
+          tasks: [
+            { name: "Carpentry", hours: "2h 30m" }
+          ]
+        }
       ],
       location: "📍 3614 Ray Court, Laurinburg",
     },
@@ -120,9 +151,13 @@ export default function Logs({ detailPage = false }: { detailPage?: boolean }) {
     setIsModalOpen(true);
   };
 
+  const getTotalTasksCount = (tasks: any[]) => {
+    return tasks.reduce((total, job) => total + job.tasks.length, 0);
+  };
+
   return (
     <div className={`flex flex-col gap-6 ${!detailPage && " px-4 "} py-4`}>
-      {!detailPage && <SearchableHeader name="All Log Entries" />}
+      {<DateRangePickerComponent name={!detailPage ? "All Log Entries" : ""} />}
       <div className="overflow-auto w-full border-1 p-3 rounded-lg">
         <Table aria-label="Recent Logs with User Info">
           <TableHeader>
@@ -162,8 +197,7 @@ export default function Logs({ detailPage = false }: { detailPage?: boolean }) {
                           onClick={() => handleTasksClick(item)}
                         >
                           <span className="text-[#FF791A]">
-                            {" "}
-                            {item.tasks.length} Tasks
+                            {getTotalTasksCount(item.tasks)} Tasks
                           </span>
                         </Button>
                       ) : (
@@ -198,21 +232,28 @@ export default function Logs({ detailPage = false }: { detailPage?: boolean }) {
             </p>
           </ModalHeader>
           <ModalBody>
-            <div className="space-y-4">
-              {selectedUser?.tasks?.map((task: any, index: number) => (
-                <div
-                  key={index}
-                  className="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-800 rounded-lg"
-                >
-                  <div className="flex-1">
-                    <h4 className="font-medium text-gray-900 dark:text-gray-100">
-                      {task.name}
-                    </h4>
-                  </div>
-                  <div className="text-right">
-                    <span className="text-sm font-semibold text-[#FF791A] dark:text-[#FF791A]">
-                      {task.hours}
-                    </span>
+            <div className="space-y-6">
+              {selectedUser?.tasks?.map((jobGroup: any, index: number) => (
+                <div key={index} className="space-y-3">
+                  <h4 className="font-semibold text-lg text-primary">{jobGroup.jobName}</h4>
+                  <div className="space-y-2">
+                    {jobGroup.tasks.map((task: any, taskIndex: number) => (
+                      <div
+                        key={taskIndex}
+                        className="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-800 rounded-lg"
+                      >
+                        <div className="flex-1">
+                          <h4 className="font-medium text-gray-900 dark:text-gray-100">
+                            {task.name}
+                          </h4>
+                        </div>
+                        <div className="text-right">
+                          <span className="text-sm font-semibold text-[#FF791A] dark:text-[#FF791A]">
+                            {task.hours}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
               ))}

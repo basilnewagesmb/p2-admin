@@ -15,6 +15,7 @@
     "@heroui/card": "2.2.18",
     "@heroui/chip": "2.2.15",
     "@heroui/code": "2.2.14",
+    "@heroui/date-picker": "^2.3.21",
     "@heroui/divider": "2.2.13",
     "@heroui/dropdown": "2.3.19",
     "@heroui/image": "2.2.12",

@@ -2,7 +2,8 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState, useCallback } from "react";
 import { debounce } from "@/lib/utils";
-import { Input } from "@heroui/input";
+import { DateRangePicker } from "@heroui/date-picker";
+import { parseDate, CalendarDate } from "@internationalized/date";
 
 interface DateRangePickerProps {
   name: string; // e.g. "Reports"
@@ -12,7 +13,7 @@ interface DateRangePickerProps {
   endDateLabel?: string;
 }
 
-export function DateRangePicker({
+export function DateRangePickerComponent({
   name,
   labelName,
   onlyLabel = false,
@@ -22,32 +23,34 @@ export function DateRangePicker({
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const [startDate, setStartDate] = useState(
-    () => searchParams.get("startDate") || ""
-  );
-  const [endDate, setEndDate] = useState(
-    () => searchParams.get("endDate") || ""
-  );
+  const [startDate, setStartDate] = useState<CalendarDate | undefined>(() => {
+    const date = searchParams.get("startDate");
+    return date ? parseDate(date) : undefined;
+  });
+  const [endDate, setEndDate] = useState<CalendarDate | undefined>(() => {
+    const date = searchParams.get("endDate");
+    return date ? parseDate(date) : undefined;
+  });
 
   useEffect(() => {
-    const start = searchParams.get("startDate") || "";
-    const end = searchParams.get("endDate") || "";
-    setStartDate(start);
-    setEndDate(end);
+    const start = searchParams.get("startDate");
+    const end = searchParams.get("endDate");
+    setStartDate(start ? parseDate(start) : undefined);
+    setEndDate(end ? parseDate(end) : undefined);
   }, [searchParams]);
 
   const handleDateChange = useCallback(
-    debounce((startDate: string, endDate: string) => {
+    debounce((value: { start: CalendarDate; end: CalendarDate } | null) => {
       const currentParams = new URLSearchParams(window.location.search);
 
-      if (startDate.trim()) {
-        currentParams.set("startDate", startDate.trim());
+      if (value?.start) {
+        currentParams.set("startDate", value.start.toString());
       } else {
         currentParams.delete("startDate");
       }
 
-      if (endDate.trim()) {
-        currentParams.set("endDate", endDate.trim());
+      if (value?.end) {
+        currentParams.set("endDate", value.end.toString());
       } else {
         currentParams.delete("endDate");
       }
@@ -64,43 +67,17 @@ export function DateRangePicker({
     [router]
   );
 
-  const handleStartDateChange = (value: string) => {
-    setStartDate(value);
-    handleDateChange(value, endDate);
-  };
-
-  const handleEndDateChange = (value: string) => {
-    setEndDate(value);
-    handleDateChange(startDate, value);
-  };
-
   return (
     <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 w-full">
       <h2 className="text-3xl font-bold tracking-tight">{name}</h2>
       {!onlyLabel && (
-        <div className="flex flex-col sm:flex-row gap-2 w-full md:w-2/3 lg:w-1/2">
-          <div className="flex-1">
-            <Input
-              type="date"
-              label={startDateLabel}
-              labelPlacement="inside"
-              className="w-full"
-              value={startDate}
-              onChange={({ target }) => handleStartDateChange(target.value)}
-              aria-label={startDateLabel}
-            />
-          </div>
-          <div className="flex-1">
-            <Input
-              type="date"
-              label={endDateLabel}
-              labelPlacement="inside"
-              className="w-full"
-              value={endDate}
-              onChange={({ target }) => handleEndDateChange(target.value)}
-              aria-label={endDateLabel}
-            />
-          </div>
+        <div className="w-full max-w-xs">
+          <DateRangePicker
+            value={startDate && endDate ? { start: startDate, end: endDate } : undefined}
+            onChange={handleDateChange}
+            label={startDateLabel}
+            size="sm"
+          />
         </div>
       )}
     </div>

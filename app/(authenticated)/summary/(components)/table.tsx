@@ -30,13 +30,13 @@ import { Button } from "@heroui/button";
 
 import { Select, SelectItem } from "@heroui/select";
 
-import { DateRangePicker } from "@/components/ui/DateRangePicker";
 import {
   ArrowBigRight,
   ArrowDown,
   ArrowRight,
   ArrowUpWideNarrow,
 } from "lucide-react";
+import { DateRangePickerComponent } from "@/components/ui/DateRangePicker";
 
 interface ISearchParams {
   searchParams: {
@@ -282,15 +282,15 @@ export default function SummeryTable() {
 
   return (
     <div className={`flex flex-col gap-6 ${" px-4 "} py-4`}>
-      <div className="flex flex-col gap-4">
-        <DateRangePicker name="Summary" />
+      <div className="flex justify-between items-center gap-4">
+        <DateRangePickerComponent name="Summary Reports" />
         <div className="w-full max-w-xs">
           <Input
             type="text"
             placeholder="Filter by username..."
             value={usernameFilter}
             onChange={(e) => setUsernameFilter(e.target.value)}
-            className="w-full"
+            className="w-full" size="lg"
           />
         </div>
       </div>
