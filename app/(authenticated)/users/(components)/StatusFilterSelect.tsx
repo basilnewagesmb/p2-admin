@@ -30,7 +30,7 @@ export default function StatusFilterSelect({ status }: { status?: string }) {
             label="Filter by Status"
             placeholder="Select status"
             selectedKeys={status ? [status] : []}
-            onChange={handleChange}
+            onChange={handleChange} size="sm"
         >
             <SelectItem key="">All</SelectItem>
             <SelectItem key="active">Active</SelectItem>

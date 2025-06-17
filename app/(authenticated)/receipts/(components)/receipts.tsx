@@ -260,15 +260,16 @@ export default function Receipts({
 
   return (
     <div className={`flex flex-col gap-6 ${!detailPage && " px-4 "} py-4`}>
-      <div className="flex flex-col gap-4">
+      <div className="flex justify-between items-center gap-4">
         <DateRangePickerComponent name={!detailPage ? "All Receipts" : ""} />
-        <div className="flex flex-wrap gap-4">
+        <div className="flex justify-between gap-4">
           <Select
             label="Filter by Job Name"
             placeholder="Select Job Name"
             selectedKeys={selectedJobName ? [selectedJobName] : []}
             onChange={(e) => setSelectedJobName(e.target.value)}
-            className="max-w-xs"
+            className="w-[200px]" size="sm"
+
           >
             <SelectItem key="" textValue="">All Jobs</SelectItem>
             <>
@@ -285,7 +286,8 @@ export default function Receipts({
             placeholder="Select Task Type"
             selectedKeys={selectedTaskType ? [selectedTaskType] : []}
             onChange={(e) => setSelectedTaskType(e.target.value)}
-            className="max-w-xs"
+            className="w-[200px]"
+            size="sm"
           >
             <SelectItem key="" textValue="">All Tasks</SelectItem>
             <>
