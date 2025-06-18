@@ -56,6 +56,7 @@ const columns = [
   { name: "User", uid: "user" },
   { name: "Job Name", uid: "jobName" },
   { name: "Task Type", uid: "taskType" },
+  { name: "Purpose Of Purchase", uid: "purpose" },
   { name: "Date", uid: "date" },
   { name: "Amount", uid: "amount" },
   { name: "Receipt", uid: "image" },
@@ -67,9 +68,8 @@ const receiptsData = [
     id: 1,
     jobName: "Tapville",
     taskType: "Painting",
-    item: "Shower Set",
-    company: "IBD Hardware",
-    date: "10 Jan 2025 - 10:30am",
+    purpose: "Paint supplies for bathroom renovation",
+    date: "10 Jan 2025",
     amount: "$85.00",
     image:
       "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=200&h=280&fit=crop",
@@ -83,9 +83,8 @@ const receiptsData = [
     id: 2,
     jobName: "Gristhouse",
     taskType: "Drywall",
-    item: "Wall Bricks",
-    company: "IBD Hardware",
-    date: "09 Jan 2025 - 2:15pm",
+    purpose: "Wall materials for interior finishing",
+    date: "09 Jan 2025",
     amount: "$240.00",
     image:
       "https://images.unsplash.com/photo-1586953208448-b95a79798f07?w=200&h=280&fit=crop",
@@ -99,9 +98,8 @@ const receiptsData = [
     id: 3,
     jobName: "Edgewood Elementary",
     taskType: "Demo",
-    item: "Power Drill Kit",
-    company: "Tool Master Pro",
-    date: "08 Jan 2025 - 11:45am",
+    purpose: "Demolition tools for classroom renovation",
+    date: "08 Jan 2025",
     amount: "$156.00",
     image:
       "https://images.unsplash.com/photo-1586953208448-b95a79798f07?w=200&h=280&fit=crop",
@@ -115,9 +113,8 @@ const receiptsData = [
     id: 4,
     jobName: "4800",
     taskType: "Plumbing",
-    item: "Pipe and Tap Set",
-    company: "Plumbing Solutions",
-    date: "07 Jan 2025 - 4:20pm",
+    purpose: "Plumbing fixtures for kitchen installation",
+    date: "07 Jan 2025",
     amount: "$95.00",
     image:
       "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=200&h=280&fit=crop",
@@ -131,9 +128,8 @@ const receiptsData = [
     id: 5,
     jobName: "Oakmont Houses",
     taskType: "Painting",
-    item: "Paint Supplies",
-    company: "ColorWorks Inc",
-    date: "06 Jan 2025 - 9:30am",
+    purpose: "Exterior paint for house renovation",
+    date: "06 Jan 2025",
     amount: "$67.50",
     image:
       "https://images.unsplash.com/photo-1586953208448-b95a79798f07?w=200&h=280&fit=crop",
@@ -149,8 +145,7 @@ type Receipt = {
   id: number;
   jobName: string;
   taskType: string;
-  item: string;
-  company: string;
+  purpose: string;
   date: string;
   amount: string;
   image: string;
@@ -203,6 +198,7 @@ export default function Receipts({
       'User Email',
       'Job Name',
       'Task Type',
+      'Purpose of Purchase',
       'Date',
       'Amount'
     ]);
@@ -215,6 +211,7 @@ export default function Receipts({
         receipt.user.email,
         receipt.jobName,
         receipt.taskType,
+        receipt.purpose,
         receipt.date,
         receipt.amount
       ]);
@@ -251,7 +248,7 @@ export default function Receipts({
       <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Receipt - ${receipt.item}</title>
+        <title>Receipt - ${receipt.purpose}</title>
         <style>
           * {
             margin: 0;
@@ -557,7 +554,7 @@ export default function Receipts({
               {columns
                 .filter((column) => !(detailPage && column.uid === "user"))
                 .map((column) => (
-                  <TableCell key={column.uid}>
+                  <TableCell key={column.uid} className={`${column.uid === "date" ? "min-w-[150px]" : ""}`}>
                     {column.uid === "serial" ? (
                       index + 1
                     ) : column.uid === "user" ? (
@@ -572,6 +569,8 @@ export default function Receipts({
                       <div className="font-semibold">{item.jobName}</div>
                     ) : column.uid === "taskType" ? (
                       <div className="text-sm text-default-600">{item.taskType}</div>
+                    ) : column.uid === "purpose" ? (
+                      <div className="text-sm text-default-600">{item.purpose}</div>
                     ) : column.uid === "date" ? (
                       item.date
                     ) : column.uid === "amount" ? (
@@ -651,7 +650,7 @@ export default function Receipts({
                 <div className="flex justify-center">
                   <Image
                     src={selectedReceipt.image}
-                    alt={`Receipt for ${selectedReceipt.item}`}
+                    alt={`Receipt for ${selectedReceipt.purpose}`}
                     width={400}
                     height={600}
                     className="rounded-lg object-contain shadow-lg"
@@ -679,6 +678,12 @@ export default function Receipts({
                       <p className="text-foreground">
                         {selectedReceipt.user.email}
                       </p>
+                    </div>
+                    <div>
+                      <span className="font-medium text-default-700">
+                        Purpose:
+                      </span>
+                      <p className="text-foreground">{selectedReceipt.purpose}</p>
                     </div>
                     <div>
                       <span className="font-medium text-default-700">

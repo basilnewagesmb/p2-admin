@@ -148,13 +148,6 @@ export default async function UserProfile({
                 <h2 className="text-xl font-bold text-default-900 mb-1">
                   {user?.name}
                 </h2>
-                <Link
-                  href="#"
-                  size="sm"
-                  className="text-primary font-medium hover:text-primary-600"
-                >
-                  {user?.role}
-                </Link>
               </div>
 
               {/* Action Buttons */}
@@ -179,34 +172,6 @@ export default async function UserProfile({
                   icon={<Mail className="w-4 h-4" />}
                   label="Email"
                   value={user?.email}
-                />
-              </div>
-
-              {/* Address Information */}
-              <div className="space-y-1 mb-8">
-                <SectionHeader
-                  title="Location"
-                  icon={<MapPin className="w-5 h-5" />}
-                />
-                <InfoItem
-                  icon={<Building className="w-4 h-4" />}
-                  label="Address"
-                  value={user?.address}
-                />
-                <InfoItem
-                  icon={<Building className="w-4 h-4" />}
-                  label="City"
-                  value={user?.city}
-                />
-                <InfoItem
-                  icon={<Building className="w-4 h-4" />}
-                  label="State"
-                  value={user?.state}
-                />
-                <InfoItem
-                  icon={<MapPin className="w-4 h-4" />}
-                  label="Zipcode"
-                  value={user?.zipcode}
                 />
               </div>
 

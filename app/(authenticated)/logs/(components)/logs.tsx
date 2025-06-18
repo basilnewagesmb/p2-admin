@@ -89,7 +89,7 @@ export default function Logs({ detailPage = false }: { detailPage?: boolean }) {
           ]
         }
       ],
-      location: "📍 3614 Ray Court, Laurinburg",
+      location: "3614 Ray Court, Laurinburg",
     },
     {
       id: 2,
@@ -117,7 +117,7 @@ export default function Logs({ detailPage = false }: { detailPage?: boolean }) {
           ]
         }
       ],
-      location: "📍 3614 Ray Court, Laurinburg",
+      location: "3614 Ray Court, Laurinburg",
     },
     {
       id: 3,
@@ -145,7 +145,7 @@ export default function Logs({ detailPage = false }: { detailPage?: boolean }) {
           ]
         }
       ],
-      location: "📍 3614 Ray Court, Laurinburg",
+      location: "3614 Ray Court, Laurinburg",
     },
   ];
 
@@ -214,35 +214,34 @@ export default function Logs({ detailPage = false }: { detailPage?: boolean }) {
     <div className={`flex flex-col gap-6 ${!detailPage && " px-4 "} py-4`}>
 
       {/* Search and Export Section */}
-      {!detailPage && (
-        <div className="flex justify-between items-center gap-4">
-          {<DateRangePickerComponent name={!detailPage ? "All Log Entries" : ""} />}
-          <div className="flex items-center gap-4">
+      <div className="flex justify-between items-center gap-4">
+        {<DateRangePickerComponent name={!detailPage ? "All Log Entries" : ""} />}
+        <div className="flex items-center gap-4">
 
-            <div className="w-full max-w-xs">
-              <Input
-                type="text"
-                placeholder="Filter by username..."
-                value={usernameFilter}
-                onChange={(e) => setUsernameFilter(e.target.value)}
-                className="w-full"
-                size="lg"
-              />
-            </div>
-            <Tooltip content="Export Logs">
-              <Button
-                isIconOnly
-                size="lg"
-                variant="solid"
-                color="primary"
-                onClick={handleExport}
-              >
-                <Download className="h-5 w-5" />
-              </Button>
-            </Tooltip>
+          <div className="w-full max-w-xs">
+            <Input
+              type="text"
+              placeholder="Filter by username..."
+              value={usernameFilter}
+              onChange={(e) => setUsernameFilter(e.target.value)}
+              className="w-full"
+              size="lg"
+            />
           </div>
+          <Tooltip content="Export Logs">
+            <Button
+              isIconOnly
+              size="lg"
+              variant="solid"
+              color="primary"
+              onClick={handleExport}
+            >
+              <Download className="h-5 w-5" />
+            </Button>
+          </Tooltip>
         </div>
-      )}
+      </div>
+
 
       <div className="overflow-auto w-full border-1 p-3 rounded-lg">
         <Table aria-label="Recent Logs with User Info">

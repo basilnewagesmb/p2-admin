@@ -72,7 +72,7 @@ export default function Dashboard() {
         { name: "Plumbing", hours: "2h 00m" },
         { name: "Cleaning", hours: "1h 00m" },
       ],
-      location: "📍 3614 Ray Court, Laurinburg",
+      location: "3614 Ray Court, Laurinburg",
     },
     {
       id: 2,
@@ -90,7 +90,7 @@ export default function Dashboard() {
         { name: "Landscaping", hours: "2h 00m" },
         { name: "Cleaning", hours: "2h 30m" },
       ],
-      location: "📍 3614 Ray Court, Laurinburg",
+      location: "3614 Ray Court, Laurinburg",
     },
     {
       id: 3,
@@ -108,7 +108,7 @@ export default function Dashboard() {
         { name: "Plumbing", hours: "3h 15m" },
         { name: "Carpentry", hours: "2h 30m" },
       ],
-      location: "📍 3614 Ray Court, Laurinburg",
+      location: "3614 Ray Court, Laurinburg",
     },
   ];
   const handleTasksClick = (item: any) => {

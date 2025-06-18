@@ -62,7 +62,7 @@ export function SortableTableHeader({ heads, basePath }: SortableTableHeaderProp
                     return (
                         <th
                             key={idx}
-                            className={`px-3 py-3 cursor-pointer first:rounded-l-lg last:rounded-r-lg  ${head.className ?? ""} bg-default-100`}
+                            className={`px-3 py-3 cursor-pointer first:rounded-l-lg last:rounded-r-lg text-center last:flex last:justify-center  ${head.className ?? ""} bg-default-100`}
                             onClick={() => head.sortable && handleSortClick(head)}
                         >
                             <div className="flex items-center space-x-1 text-gray-700 dark:text-gray-200 ">
