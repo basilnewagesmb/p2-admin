@@ -241,234 +241,263 @@ export default function Receipts({
     document.body.removeChild(link);
   };
 
-  const handlePrintReceipt = (receipt: Receipt) => {
-    try {
-      // Create a more robust print window
-      const printWindow = window.open("", "_blank", "width=800,height=600,scrollbars=yes,resizable=yes");
-      if (!printWindow) {
-        alert("Please allow pop-ups to print receipts");
-        return;
-      }
+  const handlePrintReceipt = (receipt: any) => {
+    // Create a new window for printing
+    const printWindow = window.open('', '_blank', 'width=800,height=600');
 
-      const printContent = `
-        <!DOCTYPE html>
-        <html>
-          <head>
-            <title>Receipt - ${receipt.item}</title>
-            <meta charset="utf-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <style>
-              * {
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
-              }
-              
-              body { 
-                font-family: Arial, Helvetica, sans-serif; 
-                margin: 20px; 
-                line-height: 1.6;
-                color: #333;
-              }
-              
-              .receipt-container {
-                max-width: 600px;
-                margin: 0 auto;
-                border: 2px solid #333;
-                padding: 20px;
-                background: white;
-              }
-              
-              .receipt-header { 
-                text-align: center; 
-                margin-bottom: 30px; 
-                border-bottom: 2px solid #333;
-                padding-bottom: 20px;
-              }
-              
-              .receipt-header h1 {
-                font-size: 24px;
-                margin-bottom: 10px;
-              }
-              
-              .receipt-header h2 {
-                font-size: 18px;
-                color: #666;
-              }
-              
-              .receipt-details { 
-                margin: 20px 0; 
-              }
-              
-              .detail-row { 
-                display: flex; 
-                justify-content: space-between; 
-                margin: 15px 0; 
-                padding: 8px 0;
-                border-bottom: 1px solid #eee;
-              }
-              
-              .detail-label { 
-                font-weight: bold; 
-                color: #555;
-              }
-              
-              .amount { 
-                font-size: 1.3em; 
-                font-weight: bold; 
-                color: #2c5aa0;
-              }
-              
-              .receipt-image { 
-                text-align: center; 
-                margin: 30px 0; 
-              }
-              
-              .receipt-image img { 
-                max-width: 100%; 
-                max-height: 400px; 
-                height: auto;
-                border: 1px solid #ddd;
-                border-radius: 8px;
-                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-              }
-              
-              .footer {
-                text-align: center;
-                margin-top: 30px;
-                padding-top: 20px;
-                border-top: 1px solid #333;
-                font-size: 12px;
-                color: #666;
-              }
-              
-              @media print {
-                body { 
-                  margin: 0; 
-                  -webkit-print-color-adjust: exact;
-                  color-adjust: exact;
-                }
-                .receipt-container {
-                  border: none;
-                  box-shadow: none;
-                }
-                .receipt-image img {
-                  max-height: 300px;
-                }
-              }
-              
-              @media screen and (max-width: 600px) {
-                body {
-                  margin: 10px;
-                }
-                .receipt-container {
-                  padding: 15px;
-                }
-                .detail-row {
-                  flex-direction: column;
-                  gap: 5px;
-                }
-              }
-            </style>
-          </head>
-          <body>
-            <div class="receipt-container">
-              <div class="receipt-header">
-                <h1>RECEIPT</h1>
-                <h2>${receipt.company}</h2>
+    if (!printWindow) {
+      alert('Please allow popups to print the receipt');
+      return;
+    }
+
+    // Generate the HTML content for the receipt
+    const receiptHTML = `
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Receipt - ${receipt.item}</title>
+        <style>
+          * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+          }
+          
+          body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: white;
+            padding: 20px;
+          }
+          
+          .receipt-container {
+            max-width: 600px;
+            margin: 0 auto;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+          }
+          
+          .receipt-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+          }
+          
+          .receipt-header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            font-weight: bold;
+          }
+          
+          .receipt-header p {
+            font-size: 16px;
+            opacity: 0.9;
+          }
+          
+          .receipt-body {
+            padding: 30px 20px;
+            background: white;
+          }
+          
+          .receipt-section {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+          }
+          
+          .receipt-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+          }
+          
+          .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+          }
+          
+          .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding: 8px 0;
+          }
+          
+          .detail-label {
+            font-weight: 600;
+            color: #555;
+            flex: 1;
+          }
+          
+          .detail-value {
+            font-weight: 500;
+            color: #333;
+            flex: 2;
+            text-align: right;
+          }
+          
+          .amount-highlight {
+            font-size: 24px;
+            font-weight: bold;
+            color: #27ae60;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            margin: 20px 0;
+            border: 2px solid #27ae60;
+          }
+          
+          .receipt-image {
+            text-align: center;
+            margin: 20px 0;
+          }
+          
+          .receipt-image img {
+            max-width: 200px;
+            max-height: 300px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+          }
+          
+          .receipt-footer {
+            text-align: center;
+            padding: 20px;
+            background: #f8f9fa;
+            border-top: 2px solid #eee;
+            color: #666;
+            font-size: 14px;
+          }
+          
+          .print-date {
+            margin-top: 10px;
+            font-style: italic;
+          }
+          
+          @media print {
+            body {
+              padding: 0;
+            }
+            
+            .receipt-container {
+              border: none;
+              box-shadow: none;
+            }
+            
+            .receipt-header {
+              background: #667eea !important;
+              -webkit-print-color-adjust: exact;
+              color-adjust: exact;
+            }
+            
+            .amount-highlight {
+              background: #f8f9fa !important;
+              -webkit-print-color-adjust: exact;
+              color-adjust: exact;
+            }
+          }
+        </style>
+      </head>
+      <body>
+        <div class="receipt-container">
+          <div class="receipt-header">
+            <h1>RECEIPT</h1>
+            <p>Purchase Confirmation</p>
+          </div>
+          
+          <div class="receipt-body">
+            <div class="receipt-section">
+              <div class="section-title">Customer Information</div>
+              <div class="detail-row">
+                <span class="detail-label">Name:</span>
+                <span class="detail-value">${receipt.user.name}</span>
               </div>
-              
-              <div class="receipt-details">
-                <div class="detail-row">
-                  <span class="detail-label">Customer:</span>
-                  <span>${receipt.user.name}</span>
-                </div>
-                <div class="detail-row">
-                  <span class="detail-label">Email:</span>
-                  <span>${receipt.user.email}</span>
-                </div>
-                <div class="detail-row">
-                  <span class="detail-label">Job Name:</span>
-                  <span>${receipt.jobName}</span>
-                </div>
-                <div class="detail-row">
-                  <span class="detail-label">Task Type:</span>
-                  <span>${receipt.taskType}</span>
-                </div>
-                <div class="detail-row">
-                  <span class="detail-label">Item:</span>
-                  <span>${receipt.item}</span>
-                </div>
-                <div class="detail-row">
-                  <span class="detail-label">Date:</span>
-                  <span>${receipt.date}</span>
-                </div>
-                <div class="detail-row">
-                  <span class="detail-label">Amount:</span>
-                  <span class="amount">${receipt.amount}</span>
-                </div>
-              </div>
-              
-              <div class="receipt-image">
-                <img src="${receipt.image}" alt="Receipt Image" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
-                <div style="display: none; padding: 20px; background: #f5f5f5; border-radius: 8px; color: #666;">
-                  Receipt image not available
-                </div>
-              </div>
-              
-              <div class="footer">
-                <p>Generated on ${new Date().toLocaleDateString()} at ${new Date().toLocaleTimeString()}</p>
-                <p>Thank you for your business!</p>
+              <div class="detail-row">
+                <span class="detail-label">Email:</span>
+                <span class="detail-value">${receipt.user.email}</span>
               </div>
             </div>
             
-            <script>
-              // Auto-print when content is loaded
-              window.onload = function() {
-                setTimeout(function() {
-                  window.print();
-                }, 500);
-              };
-              
-              // Fallback print button
-              document.addEventListener('keydown', function(e) {
-                if (e.ctrlKey && e.key === 'p') {
-                  e.preventDefault();
-                  window.print();
-                }
-              });
-            </script>
-          </body>
-        </html>
-      `;
+            <div class="receipt-section">
+              <div class="section-title">Job Details</div>
+              <div class="detail-row">
+                <span class="detail-label">Job Name:</span>
+                <span class="detail-value">${receipt.jobName}</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Task Type:</span>
+                <span class="detail-value">${receipt.taskType}</span>
+              </div>
+            </div>
+            
+            <div class="receipt-section">
+              <div class="section-title">Purchase Information</div>
+              <div class="detail-row">
+                <span class="detail-label">Item:</span>
+                <span class="detail-value">${receipt.item}</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Company:</span>
+                <span class="detail-value">${receipt.company}</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">${receipt.date}</span>
+              </div>
+            </div>
+            
+            <div class="amount-highlight">
+              Total Amount: ${receipt.amount}
+            </div>
+            
+            <div class="receipt-image">
+              <img src="${receipt.image}" alt="Receipt Image" onerror="this.style.display='none'">
+            </div>
+          </div>
+          
+          <div class="receipt-footer">
+            <p>Thank you for your business!</p>
+            <div class="print-date">
+              Printed on: ${new Date().toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    })}
+            </div>
+          </div>
+        </div>
+        
+        <script>
+          // Auto-print when the page loads
+          window.onload = function() {
+            window.print();
+            // Close the window after printing (optional)
+            window.onafterprint = function() {
+              window.close();
+            };
+          };
+        </script>
+      </body>
+      </html>
+    `;
 
-      // Write content and handle loading
-      printWindow.document.write(printContent);
-      printWindow.document.close();
+    // Write the HTML content to the new window
+    printWindow.document.write(receiptHTML);
+    printWindow.document.close();
 
-      // Ensure content is loaded before printing
-      printWindow.onload = function () {
-        setTimeout(() => {
-          try {
-            printWindow.focus();
-            printWindow.print();
-          } catch (error) {
-            console.error('Print failed:', error);
-            // Fallback: show manual print instructions
-            printWindow.document.body.innerHTML += '<div style="position: fixed; top: 10px; right: 10px; background: #ff6b6b; color: white; padding: 10px; border-radius: 5px; z-index: 1000;">Press Ctrl+P to print</div>';
-          }
-        }, 1000);
-      };
-
-      // Handle window close
-      printWindow.onbeforeunload = function () {
-        // Clean up if needed
-      };
-
-    } catch (error) {
-      console.error('Print receipt error:', error);
-      alert('Failed to open print window. Please try again or use Ctrl+P to print manually.');
-    }
+    // Focus on the print window
+    printWindow.focus();
   };
 
   return (
