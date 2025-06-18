@@ -27,6 +27,8 @@ import {
 import { SearchableHeader } from "@/components/ui/SearchableHeader";
 import { PaginationClient } from "@/components/ui/PaginationClient";
 import { DateRangePickerComponent } from "@/components/ui/DateRangePicker";
+import { Download } from "lucide-react";
+import { Tooltip } from "@heroui/tooltip";
 
 const stats = [
   {
@@ -50,7 +52,7 @@ const stats = [
 ];
 
 const columns = [
-  { name: "S.No", uid: "serial" },
+  { name: "#", uid: "serial" },
   { name: "User", uid: "user" },
   { name: "Job Name", uid: "jobName" },
   { name: "Task Type", uid: "taskType" },
@@ -192,6 +194,53 @@ export default function Receipts({
     setSelectedReceipt(null);
   };
 
+  const handleExport = () => {
+    // Create CSV data
+    const csvData = [];
+
+    // Add header
+    csvData.push([
+      '#',
+      'User Name',
+      'User Email',
+      'Job Name',
+      'Task Type',
+      'Item',
+      'Company',
+      'Date',
+      'Amount'
+    ]);
+
+    // Add data rows
+    filteredReceipts.forEach((receipt, index) => {
+      csvData.push([
+        index + 1,
+        receipt.user.name,
+        receipt.user.email,
+        receipt.jobName,
+        receipt.taskType,
+        receipt.item,
+        receipt.company,
+        receipt.date,
+        receipt.amount
+      ]);
+    });
+
+    // Convert to CSV string
+    const csvString = csvData.map(row => row.map(cell => `"${cell}"`).join(',')).join('\n');
+
+    // Create and download file
+    const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', 'receipts_report.csv');
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   const handlePrintReceipt = (receipt: Receipt) => {
     const printWindow = window.open("", "_blank");
     if (!printWindow) return;
@@ -298,6 +347,20 @@ export default function Receipts({
               ))}
             </>
           </Select>
+
+          {!detailPage && (
+            <Tooltip content="Export Receipts">
+              <Button
+                isIconOnly
+                size="lg"
+                variant="solid"
+                color="primary"
+                onClick={handleExport}
+              >
+                <Download className="h-5 w-5" />
+              </Button>
+            </Tooltip>
+          )}
         </div>
       </div>
 

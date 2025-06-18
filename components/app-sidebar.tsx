@@ -60,18 +60,18 @@ const items = [
     icon: Logs,
   },
   {
-    title: "All Receitps",
+    title: "All Receipts",
     url: "/receipts",
     icon: ReceiptText,
+  }, {
+    title: "Summary Reports",
+    url: "/summary",
+    icon: Target,
   },
   {
     title: "Job Names",
     url: "/job-names",
     icon: FolderPen,
-  }, {
-    title: "Summary Reports",
-    url: "/summary",
-    icon: Target,
   },
   {
     title: "Task Types",
@@ -182,9 +182,7 @@ export function AppSidebar({ session }: any) {
                 side="top"
                 className="w-[--radix-popper-anchor-width]"
               >
-                <DropdownMenuItem className="cursor-pointer py-2">
-                  <span>Account</span>
-                </DropdownMenuItem>
+
                 <DropdownMenuItem className="cursor-pointer  py-2">
                   <span>Settings</span>
                 </DropdownMenuItem>

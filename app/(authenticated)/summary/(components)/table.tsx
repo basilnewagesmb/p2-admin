@@ -35,7 +35,7 @@ import {
   ArrowDown,
   ArrowRight,
   ArrowUpWideNarrow,
-  Printer,
+  Download,
 } from "lucide-react";
 import { DateRangePickerComponent } from "@/components/ui/DateRangePicker";
 
@@ -62,19 +62,18 @@ export default function SummeryTable() {
   const [usernameFilter, setUsernameFilter] = useState("");
 
   const columns = [
-    { name: "S.No", uid: "sno" },
+    { name: "#", uid: "sno" },
     { name: "", uid: "expand" },
     { name: "Employee Name", uid: "user" },
-    { name: "Email", uid: "email" },
     { name: "Date Range", uid: "dateRange" },
-    { name: "Worked Days", uid: "totalDays" },
+    { name: "#Worked Days", uid: "totalDays" },
     { name: "Total Hours", uid: "totalHours" },
     { name: "Total Receipt Amount", uid: "totalReceiptAmount" },
     { name: "Actions", uid: "actions" },
   ];
 
   const logColumns = [
-    { name: "S.No", uid: "sno" },
+    { name: "#", uid: "sno" },
     { name: "Date", uid: "date" },
     { name: "In Time", uid: "in" },
     { name: "Out Time", uid: "out" },
@@ -84,7 +83,7 @@ export default function SummeryTable() {
   ];
 
   const receiptColumns = [
-    { name: "S.No", uid: "sno" },
+    { name: "#", uid: "sno" },
     { name: "Date", uid: "date" },
     { name: "Receipt No", uid: "receiptNo" },
     { name: "Amount", uid: "amount" },
@@ -281,14 +280,56 @@ export default function SummeryTable() {
     setExpandedUsers(newExpandedUsers);
   };
 
-  const handlePrint = () => {
+  const handleExport = () => {
     // Expand all users first
     const allUserIds = userSummaries.map(summary => summary.id);
     setExpandedUsers(new Set(allUserIds));
 
-    // Wait longer for the DOM to update, then print
+    // Wait longer for the DOM to update, then export
     setTimeout(() => {
-      window.print();
+      // Create CSV data
+      const csvData = [];
+
+      // Add header
+      csvData.push([
+        '#',
+        'Employee Name',
+        'Email',
+        'Date Range',
+        '#Worked Days',
+        'Total Hours',
+        'Total Receipt Amount'
+      ]);
+
+      // Add data rows
+      filteredUserSummaries.forEach((userSummary, index) => {
+        const totalReceiptAmount = userSummary.receipts.reduce((total: number, receipt: any) =>
+          total + parseFloat(receipt.amount.replace('$', '')), 0).toFixed(2);
+
+        csvData.push([
+          index + 1,
+          userSummary.user.name,
+          userSummary.user.email,
+          `${userSummary.logs[0]?.date} - ${userSummary.logs[userSummary.logs.length - 1]?.date}`,
+          userSummary.totalDays,
+          userSummary.totalHours,
+          `$${totalReceiptAmount}`
+        ]);
+      });
+
+      // Convert to CSV string
+      const csvString = csvData.map(row => row.map(cell => `"${cell}"`).join(',')).join('\n');
+
+      // Create and download file
+      const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      const url = URL.createObjectURL(blob);
+      link.setAttribute('href', url);
+      link.setAttribute('download', 'summary_report.csv');
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     }, 500);
   };
 
@@ -354,18 +395,18 @@ export default function SummeryTable() {
               placeholder="Filter by username..."
               value={usernameFilter}
               onChange={(e) => setUsernameFilter(e.target.value)}
-              className="w-full" size="lg"
+              className="w-[200px]" size="lg"
             />
           </div>
-          <Tooltip content="Print Summary Table">
+          <Tooltip content="Export Summary Table">
             <Button
               isIconOnly
               size="lg"
               variant="solid"
               color="primary"
-              onClick={handlePrint}
+              onClick={handleExport}
             >
-              <Printer className="h-5 w-5" />
+              <Download className="h-5 w-5" />
             </Button>
           </Tooltip>
         </div>
@@ -414,11 +455,6 @@ export default function SummeryTable() {
                         src: userSummary.user.avatar,
                       }}
                     />
-                  </TableCell>
-                  <TableCell>
-                    <span className="text-sm text-gray-600 dark:text-gray-400">
-                      {userSummary.user.email}
-                    </span>
                   </TableCell>
                   <TableCell>
                     <span className="text-sm text-gray-600 dark:text-gray-400">

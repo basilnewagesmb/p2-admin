@@ -23,7 +23,7 @@ import { PaginationClient } from "@/components/ui/PaginationClient";
 import { Edit, Trash2, Plus, AlertTriangle } from "lucide-react";
 
 const columns = [
-  { name: "S.No", uid: "serial" },
+  { name: "#", uid: "serial" },
   { name: "Job Name", uid: "name" },
   { name: "Description", uid: "description" },
   { name: "Status", uid: "status" },

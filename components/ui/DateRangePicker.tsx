@@ -3,7 +3,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState, useCallback } from "react";
 import { debounce } from "@/lib/utils";
 import { DateRangePicker } from "@heroui/date-picker";
-import { parseDate, CalendarDate } from "@internationalized/date";
+import { parseDate, CalendarDate, today, getLocalTimeZone } from "@internationalized/date";
 
 interface DateRangePickerProps {
   name: string; // e.g. "Reports"
@@ -11,6 +11,20 @@ interface DateRangePickerProps {
   onlyLabel?: boolean; // If true, only show the label without the date inputs
   startDateLabel?: string;
   endDateLabel?: string;
+}
+
+// Helper function to get the first day of current month
+function getFirstDayOfCurrentMonth(): CalendarDate {
+  const now = today(getLocalTimeZone());
+  return new CalendarDate(now.year, now.month, 1);
+}
+
+// Helper function to format date as DDMMYYYY
+function formatDateAsDDMMYYYY(date: CalendarDate): string {
+  const day = date.day.toString().padStart(2, '0');
+  const month = date.month.toString().padStart(2, '0');
+  const year = date.year.toString();
+  return `${day}${month}${year}`;
 }
 
 export function DateRangePickerComponent({
@@ -25,19 +39,39 @@ export function DateRangePickerComponent({
 
   const [startDate, setStartDate] = useState<CalendarDate | undefined>(() => {
     const date = searchParams.get("startDate");
-    return date ? parseDate(date) : undefined;
+    return date ? parseDate(date) : getFirstDayOfCurrentMonth();
   });
   const [endDate, setEndDate] = useState<CalendarDate | undefined>(() => {
     const date = searchParams.get("endDate");
-    return date ? parseDate(date) : undefined;
+    return date ? parseDate(date) : today(getLocalTimeZone());
   });
 
   useEffect(() => {
     const start = searchParams.get("startDate");
     const end = searchParams.get("endDate");
-    setStartDate(start ? parseDate(start) : undefined);
-    setEndDate(end ? parseDate(end) : undefined);
-  }, [searchParams]);
+
+    // If no dates in URL, set defaults
+    if (!start && !end) {
+      const defaultStart = getFirstDayOfCurrentMonth();
+      const defaultEnd = today(getLocalTimeZone());
+      setStartDate(defaultStart);
+      setEndDate(defaultEnd);
+
+      // Update URL with default dates
+      const currentParams = new URLSearchParams(window.location.search);
+      currentParams.set("startDate", defaultStart.toString());
+      currentParams.set("endDate", defaultEnd.toString());
+      currentParams.set("page", "1");
+
+      router.replace(
+        `${window.location.pathname}?${currentParams.toString()}`,
+        { scroll: false }
+      );
+    } else {
+      setStartDate(start ? parseDate(start) : undefined);
+      setEndDate(end ? parseDate(end) : undefined);
+    }
+  }, [searchParams, router]);
 
   const handleDateChange = useCallback(
     debounce((value: { start: CalendarDate; end: CalendarDate } | null) => {

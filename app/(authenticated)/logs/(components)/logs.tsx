@@ -28,6 +28,7 @@ import {
 } from "@heroui/modal";
 import { Button } from "@heroui/button";
 import { DateRangePickerComponent } from "@/components/ui/DateRangePicker";
+import { Download } from "lucide-react";
 
 interface ISearchParams {
   searchParams: {
@@ -47,9 +48,10 @@ interface ISearchParams {
 export default function Logs({ detailPage = false }: { detailPage?: boolean }) {
   const [selectedUser, setSelectedUser] = useState<any>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [usernameFilter, setUsernameFilter] = useState("");
 
   const columns = [
-    { name: "S.No", uid: "sno" },
+    { name: "#", uid: "sno" },
     { name: "User", uid: "user" },
     { name: "Date", uid: "date" },
     { name: "In Time", uid: "in" },
@@ -146,6 +148,12 @@ export default function Logs({ detailPage = false }: { detailPage?: boolean }) {
       location: "📍 3614 Ray Court, Laurinburg",
     },
   ];
+
+  // Filter logs based on username
+  const filteredLogs = logs.filter((log) =>
+    log.user.name.toLowerCase().includes(usernameFilter.toLowerCase())
+  );
+
   const handleTasksClick = (item: any) => {
     setSelectedUser(item);
     setIsModalOpen(true);
@@ -155,9 +163,87 @@ export default function Logs({ detailPage = false }: { detailPage?: boolean }) {
     return tasks.reduce((total, job) => total + job.tasks.length, 0);
   };
 
+  const handleExport = () => {
+    // Create CSV data
+    const csvData = [];
+
+    // Add header
+    csvData.push([
+      '#',
+      'User Name',
+      'User Email',
+      'Date',
+      'In Time',
+      'Out Time',
+      'Duration',
+      'Total Tasks',
+      'Location'
+    ]);
+
+    // Add data rows
+    filteredLogs.forEach((log, index) => {
+      csvData.push([
+        index + 1,
+        log.user.name,
+        log.user.email,
+        log.date,
+        log.in,
+        log.out,
+        log.duration,
+        getTotalTasksCount(log.tasks),
+        log.location
+      ]);
+    });
+
+    // Convert to CSV string
+    const csvString = csvData.map(row => row.map(cell => `"${cell}"`).join(',')).join('\n');
+
+    // Create and download file
+    const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', 'logs_report.csv');
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <div className={`flex flex-col gap-6 ${!detailPage && " px-4 "} py-4`}>
-      {<DateRangePickerComponent name={!detailPage ? "All Log Entries" : ""} />}
+
+      {/* Search and Export Section */}
+      {!detailPage && (
+        <div className="flex justify-between items-center gap-4">
+          {<DateRangePickerComponent name={!detailPage ? "All Log Entries" : ""} />}
+          <div className="flex items-center gap-4">
+
+            <div className="w-full max-w-xs">
+              <Input
+                type="text"
+                placeholder="Filter by username..."
+                value={usernameFilter}
+                onChange={(e) => setUsernameFilter(e.target.value)}
+                className="w-full"
+                size="lg"
+              />
+            </div>
+            <Tooltip content="Export Logs">
+              <Button
+                isIconOnly
+                size="lg"
+                variant="solid"
+                color="primary"
+                onClick={handleExport}
+              >
+                <Download className="h-5 w-5" />
+              </Button>
+            </Tooltip>
+          </div>
+        </div>
+      )}
+
       <div className="overflow-auto w-full border-1 p-3 rounded-lg">
         <Table aria-label="Recent Logs with User Info">
           <TableHeader>
@@ -172,7 +258,7 @@ export default function Logs({ detailPage = false }: { detailPage?: boolean }) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {logs.map((item, index) => (
+            {filteredLogs.map((item, index) => (
               <TableRow key={item.id}>
                 {columns
                   .filter((column) => !(detailPage && column.uid === "user"))

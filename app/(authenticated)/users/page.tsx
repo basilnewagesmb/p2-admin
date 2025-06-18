@@ -53,7 +53,7 @@ export default async function Users({ searchParams }: ISearchParams) {
   });
   const users = data?.users || [];
   const tableHeaders = [
-    { name: "S.No", key: "sno", sortable: false },
+    { name: "#", key: "sno", sortable: false },
     { name: "Name", key: "name", sortable: true },
     { name: "Phone", key: "phone", sortable: false },
     { name: "Status", key: "status", sortable: false },
