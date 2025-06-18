@@ -35,6 +35,7 @@ import {
   ArrowDown,
   ArrowRight,
   ArrowUpWideNarrow,
+  Printer,
 } from "lucide-react";
 import { DateRangePickerComponent } from "@/components/ui/DateRangePicker";
 
@@ -280,22 +281,97 @@ export default function SummeryTable() {
     setExpandedUsers(newExpandedUsers);
   };
 
+  const handlePrint = () => {
+    // Expand all users first
+    const allUserIds = userSummaries.map(summary => summary.id);
+    setExpandedUsers(new Set(allUserIds));
+
+    // Wait longer for the DOM to update, then print
+    setTimeout(() => {
+      window.print();
+    }, 500);
+  };
+
   return (
     <div className={`flex flex-col gap-6 ${" px-4 "} py-4`}>
-      <div className="flex justify-between items-center gap-4">
+      {/* Print styles */}
+      <style jsx>{`
+        @media print {
+          body {
+            margin: 0;
+            padding: 0;
+          }
+          
+          .print-container {
+            padding: 0 !important;
+            margin: 0 !important;
+          }
+          
+          .print-table {
+            width: 100% !important;
+            border-collapse: collapse !important;
+            page-break-inside: auto !important;
+          }
+          
+          .print-table th,
+          .print-table td {
+            border: 1px solid #ddd !important;
+            padding: 8px !important;
+            text-align: left !important;
+            page-break-inside: avoid !important;
+          }
+          
+          .print-table tr {
+            page-break-inside: avoid !important;
+            page-break-after: auto !important;
+          }
+          
+          .print-expanded-content {
+            display: block !important;
+            page-break-inside: avoid !important;
+          }
+          
+          .print-hidden {
+            display: none !important;
+          }
+          
+          .print-button {
+            display: none !important;
+          }
+          
+          .print-tooltip {
+            display: none !important;
+          }
+        }
+      `}</style>
+
+      <div className="flex justify-between items-center gap-4 print-hidden">
         <DateRangePickerComponent name="Summary Reports" />
-        <div className="w-full max-w-xs">
-          <Input
-            type="text"
-            placeholder="Filter by username..."
-            value={usernameFilter}
-            onChange={(e) => setUsernameFilter(e.target.value)}
-            className="w-full" size="lg"
-          />
+        <div className="flex items-center gap-4">
+          <div className="w-full max-w-xs">
+            <Input
+              type="text"
+              placeholder="Filter by username..."
+              value={usernameFilter}
+              onChange={(e) => setUsernameFilter(e.target.value)}
+              className="w-full" size="lg"
+            />
+          </div>
+          <Tooltip content="Print Summary Table">
+            <Button
+              isIconOnly
+              size="lg"
+              variant="solid"
+              color="primary"
+              onClick={handlePrint}
+            >
+              <Printer className="h-5 w-5" />
+            </Button>
+          </Tooltip>
         </div>
       </div>
-      <div className="overflow-auto w-full border-1 p-3 rounded-lg">
-        <Table aria-label="User Summary with Expandable Logs">
+      <div className="overflow-auto w-full border-1 p-3 rounded-lg print-container">
+        <Table aria-label="User Summary with Expandable Logs" className="print-table">
           <TableHeader>
             <TableRow>
               {columns.map((column) => (
@@ -366,7 +442,7 @@ export default function SummeryTable() {
                     </span>
                   </TableCell>
                   <TableCell>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 print-hidden">
                       <Tooltip content="View Details">
                         <Button
                           isIconOnly
@@ -377,30 +453,7 @@ export default function SummeryTable() {
                           <EyeIcon className="h-4 w-4" />
                         </Button>
                       </Tooltip>
-                      <Tooltip content="Print Summary">
-                        <Button
-                          isIconOnly
-                          size="sm"
-                          variant="light"
-                        // onClick={() => window.print()}
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="16"
-                            height="16"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          >
-                            <polyline points="6 9 6 2 18 2 18 9" />
-                            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
-                            <rect x="6" y="14" width="12" height="8" />
-                          </svg>
-                        </Button>
-                      </Tooltip>
+
                     </div>
                   </TableCell>
                 </TableRow>
@@ -410,7 +463,7 @@ export default function SummeryTable() {
                   <TableRow>
                     <TableCell
                       colSpan={columns.length}
-                      className="p-0 bg-gray-50 dark:bg-gray-900"
+                      className="p-0 bg-gray-50 dark:bg-gray-900 print-expanded-content"
                     >
                       <div className="p-4">
                         <div className="mb-3 flex justify-between items-center">
@@ -551,7 +604,7 @@ export default function SummeryTable() {
           </TableBody>
         </Table>
       </div>
-      <div className="flex justify-center md:justify-end w-full">
+      <div className="flex justify-center md:justify-end w-full print-hidden">
         <PaginationClient totalPages={1} currentPage={1} />
       </div>
 
