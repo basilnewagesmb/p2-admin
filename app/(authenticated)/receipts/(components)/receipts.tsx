@@ -554,7 +554,7 @@ export default function Receipts({
               {columns
                 .filter((column) => !(detailPage && column.uid === "user"))
                 .map((column) => (
-                  <TableCell key={column.uid} className={`${column.uid === "date" ? "min-w-[150px]" : ""}`}>
+                  <TableCell key={column.uid} className={`${column.uid === "date" ? "w-[150px]" : ""}`}>
                     {column.uid === "serial" ? (
                       index + 1
                     ) : column.uid === "user" ? (
