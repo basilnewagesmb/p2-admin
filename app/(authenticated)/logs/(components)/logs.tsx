@@ -218,7 +218,7 @@ export default function Logs({ detailPage = false }: { detailPage?: boolean }) {
         {<DateRangePickerComponent name={!detailPage ? "All Log Entries" : ""} />}
         <div className="flex items-center gap-4">
 
-          <div className="w-full max-w-xs">
+          {!detailPage && <div className="w-full max-w-xs">
             <Input
               type="text"
               placeholder="Filter by username..."
@@ -227,7 +227,7 @@ export default function Logs({ detailPage = false }: { detailPage?: boolean }) {
               className="w-full"
               size="lg"
             />
-          </div>
+          </div>}
           <Tooltip content="Export Logs">
             <Button
               isIconOnly
