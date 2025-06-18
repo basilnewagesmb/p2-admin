@@ -56,8 +56,6 @@ const columns = [
   { name: "User", uid: "user" },
   { name: "Job Name", uid: "jobName" },
   { name: "Task Type", uid: "taskType" },
-  { name: "Item", uid: "item" },
-  { name: "Company", uid: "company" },
   { name: "Date", uid: "date" },
   { name: "Amount", uid: "amount" },
   { name: "Receipt", uid: "image" },
@@ -205,8 +203,6 @@ export default function Receipts({
       'User Email',
       'Job Name',
       'Task Type',
-      'Item',
-      'Company',
       'Date',
       'Amount'
     ]);
@@ -219,8 +215,6 @@ export default function Receipts({
         receipt.user.email,
         receipt.jobName,
         receipt.taskType,
-        receipt.item,
-        receipt.company,
         receipt.date,
         receipt.amount
       ]);
@@ -442,14 +436,6 @@ export default function Receipts({
             <div class="receipt-section">
               <div class="section-title">Purchase Information</div>
               <div class="detail-row">
-                <span class="detail-label">Item:</span>
-                <span class="detail-value">${receipt.item}</span>
-              </div>
-              <div class="detail-row">
-                <span class="detail-label">Company:</span>
-                <span class="detail-value">${receipt.company}</span>
-              </div>
-              <div class="detail-row">
                 <span class="detail-label">Date:</span>
                 <span class="detail-value">${receipt.date}</span>
               </div>
@@ -586,8 +572,10 @@ export default function Receipts({
                       <div className="font-semibold">{item.jobName}</div>
                     ) : column.uid === "taskType" ? (
                       <div className="text-sm text-default-600">{item.taskType}</div>
-                    ) : column.uid === "item" ? (
-                      item.item
+                    ) : column.uid === "date" ? (
+                      item.date
+                    ) : column.uid === "amount" ? (
+                      item.amount
                     ) : column.uid === "image" ? (
                       <div onClick={() => handleReceiptClick(item)}>
                         <Image
@@ -625,18 +613,7 @@ export default function Receipts({
                         </Button>
                       </div>
                     ) : (
-                      (() => {
-                        switch (column.uid) {
-                          case "company":
-                            return item.company;
-                          case "date":
-                            return item.date;
-                          case "amount":
-                            return item.amount;
-                          default:
-                            return null;
-                        }
-                      })()
+                      null
                     )}
                   </TableCell>
                 ))}
@@ -663,7 +640,7 @@ export default function Receipts({
             <h3 className="text-xl font-semibold">Receipt Preview</h3>
             {selectedReceipt && (
               <p className="text-sm text-default-600">
-                {selectedReceipt.item} - {selectedReceipt.company}
+                {selectedReceipt.jobName} - {selectedReceipt.taskType}
               </p>
             )}
           </ModalHeader>
@@ -701,20 +678,6 @@ export default function Receipts({
                       </span>
                       <p className="text-foreground">
                         {selectedReceipt.user.email}
-                      </p>
-                    </div>
-                    <div>
-                      <span className="font-medium text-default-700">
-                        Item:
-                      </span>
-                      <p className="text-foreground">{selectedReceipt.item}</p>
-                    </div>
-                    <div>
-                      <span className="font-medium text-default-700">
-                        Company:
-                      </span>
-                      <p className="text-foreground">
-                        {selectedReceipt.company}
                       </p>
                     </div>
                     <div>
