@@ -11,10 +11,7 @@ import {
   ModalBody,
   ModalFooter,
 } from "@heroui/modal";
-import {
-  Select,
-  SelectItem,
-} from "@heroui/select";
+import { Select, SelectItem } from "@heroui/select";
 
 import {
   Table,
@@ -167,13 +164,19 @@ export default function Receipts({
   const [selectedTaskType, setSelectedTaskType] = useState<string>("");
 
   // Get unique job names and task types for filters
-  const uniqueJobNames = Array.from(new Set(receiptsData.map(receipt => receipt.jobName)));
-  const uniqueTaskTypes = Array.from(new Set(receiptsData.map(receipt => receipt.taskType)));
+  const uniqueJobNames = Array.from(
+    new Set(receiptsData.map((receipt) => receipt.jobName))
+  );
+  const uniqueTaskTypes = Array.from(
+    new Set(receiptsData.map((receipt) => receipt.taskType))
+  );
 
   // Filter receipts based on selected filters
-  const filteredReceipts = receiptsData.filter(receipt => {
-    const matchesJobName = !selectedJobName || receipt.jobName === selectedJobName;
-    const matchesTaskType = !selectedTaskType || receipt.taskType === selectedTaskType;
+  const filteredReceipts = receiptsData.filter((receipt) => {
+    const matchesJobName =
+      !selectedJobName || receipt.jobName === selectedJobName;
+    const matchesTaskType =
+      !selectedTaskType || receipt.taskType === selectedTaskType;
     return matchesJobName && matchesTaskType;
   });
 
@@ -193,14 +196,14 @@ export default function Receipts({
 
     // Add header
     csvData.push([
-      '#',
-      'User Name',
-      'User Email',
-      'Job Name',
-      'Task Type',
-      'Purpose of Purchase',
-      'Date',
-      'Amount'
+      "#",
+      "User Name",
+      "User Email",
+      "Job Name",
+      "Task Type",
+      "Purpose of Purchase",
+      "Date",
+      "Amount",
     ]);
 
     // Add data rows
@@ -213,20 +216,22 @@ export default function Receipts({
         receipt.taskType,
         receipt.purpose,
         receipt.date,
-        receipt.amount
+        receipt.amount,
       ]);
     });
 
     // Convert to CSV string
-    const csvString = csvData.map(row => row.map(cell => `"${cell}"`).join(',')).join('\n');
+    const csvString = csvData
+      .map((row) => row.map((cell) => `"${cell}"`).join(","))
+      .join("\n");
 
     // Create and download file
-    const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
+    const blob = new Blob([csvString], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
     const url = URL.createObjectURL(blob);
-    link.setAttribute('href', url);
-    link.setAttribute('download', 'receipts_report.csv');
-    link.style.visibility = 'hidden';
+    link.setAttribute("href", url);
+    link.setAttribute("download", "receipts_report.csv");
+    link.style.visibility = "hidden";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -234,10 +239,10 @@ export default function Receipts({
 
   const handlePrintReceipt = (receipt: any) => {
     // Create a new window for printing
-    const printWindow = window.open('', '_blank', 'width=800,height=600');
+    const printWindow = window.open("", "_blank", "width=800,height=600");
 
     if (!printWindow) {
-      alert('Please allow popups to print the receipt');
+      alert("Please allow popups to print the receipt");
       return;
     }
 
@@ -450,13 +455,13 @@ export default function Receipts({
           <div class="receipt-footer">
             <p>Thank you for your business!</p>
             <div class="print-date">
-              Printed on: ${new Date().toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    })}
+              Printed on: ${new Date().toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
             </div>
           </div>
         </div>
@@ -490,13 +495,14 @@ export default function Receipts({
         <div className="flex justify-between gap-4">
           <Select
             label="Filter by Job Name"
-            placeholder="Select Job Name"
             selectedKeys={selectedJobName ? [selectedJobName] : []}
             onChange={(e) => setSelectedJobName(e.target.value)}
-            className="w-[200px]" size="sm"
-
+            className="w-[200px]"
+            size="sm"
           >
-            <SelectItem key="" textValue="">All Jobs</SelectItem>
+            <SelectItem key="" textValue="">
+              All Jobs
+            </SelectItem>
             <>
               {uniqueJobNames.map((jobName) => (
                 <SelectItem key={jobName} textValue={jobName}>
@@ -508,13 +514,14 @@ export default function Receipts({
 
           <Select
             label="Filter by Task Type"
-            placeholder="Select Task Type"
             selectedKeys={selectedTaskType ? [selectedTaskType] : []}
             onChange={(e) => setSelectedTaskType(e.target.value)}
             className="w-[200px]"
             size="sm"
           >
-            <SelectItem key="" textValue="">All Tasks</SelectItem>
+            <SelectItem key="" textValue="">
+              All Tasks
+            </SelectItem>
             <>
               {uniqueTaskTypes.map((taskType) => (
                 <SelectItem key={taskType} textValue={taskType}>
@@ -554,7 +561,10 @@ export default function Receipts({
               {columns
                 .filter((column) => !(detailPage && column.uid === "user"))
                 .map((column) => (
-                  <TableCell key={column.uid} className={`${column.uid === "date" ? "w-[150px]" : ""}`}>
+                  <TableCell
+                    key={column.uid}
+                    className={`${column.uid === "date" ? "w-[150px]" : ""}`}
+                  >
                     {column.uid === "serial" ? (
                       index + 1
                     ) : column.uid === "user" ? (
@@ -568,9 +578,13 @@ export default function Receipts({
                     ) : column.uid === "jobName" ? (
                       <div className="font-semibold">{item.jobName}</div>
                     ) : column.uid === "taskType" ? (
-                      <div className="text-sm text-default-600">{item.taskType}</div>
+                      <div className="text-sm text-default-600">
+                        {item.taskType}
+                      </div>
                     ) : column.uid === "purpose" ? (
-                      <div className="text-sm text-default-600">{item.purpose}</div>
+                      <div className="text-sm text-default-600">
+                        {item.purpose}
+                      </div>
                     ) : column.uid === "date" ? (
                       item.date
                     ) : column.uid === "amount" ? (
@@ -611,9 +625,7 @@ export default function Receipts({
                           </svg>
                         </Button>
                       </div>
-                    ) : (
-                      null
-                    )}
+                    ) : null}
                   </TableCell>
                 ))}
             </TableRow>
@@ -683,7 +695,9 @@ export default function Receipts({
                       <span className="font-medium text-default-700">
                         Purpose:
                       </span>
-                      <p className="text-foreground">{selectedReceipt.purpose}</p>
+                      <p className="text-foreground">
+                        {selectedReceipt.purpose}
+                      </p>
                     </div>
                     <div>
                       <span className="font-medium text-default-700">
