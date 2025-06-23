@@ -142,10 +142,13 @@ interface FlatLog {
   date?: string;
 }
 
-
 export default function SummeryTable() {
-  const uniqueJobNames = Array.from(new Set(receiptsData.map(receipt => receipt.jobName)));
-  const uniqueTaskTypes = Array.from(new Set(receiptsData.map(receipt => receipt.taskType)));
+  const uniqueJobNames = Array.from(
+    new Set(receiptsData.map((receipt) => receipt.jobName))
+  );
+  const uniqueTaskTypes = Array.from(
+    new Set(receiptsData.map((receipt) => receipt.taskType))
+  );
 
   const [selectedJobName, setSelectedJobName] = useState<string>("");
   const [selectedTaskType, setSelectedTaskType] = useState<string>("");
@@ -162,7 +165,6 @@ export default function SummeryTable() {
     { name: "", uid: "expand" },
     { name: "Employee Name", uid: "user" },
     { name: "Date Range", uid: "dateRange" },
-    { name: "#Worked Days", uid: "totalDays" },
     { name: "Total Hours", uid: "totalHours" },
     { name: "Total Receipt Amount", uid: "totalReceiptAmount" },
     { name: "Actions", uid: "actions" },
@@ -197,76 +199,76 @@ export default function SummeryTable() {
     totalDays: number;
     totalHours: string;
     totalTasks: number;
-    logs: FlatLog[];
+    logs: { taskType: string; taskName: string }[];
     dateRange: string;
     totalReceiptAmount: string;
   }> = [
-      {
-        id: 1,
-        user: {
-          name: "John Doe",
-          email: "john@example.com",
-          avatar: "https://i.pravatar.cc/150?img=1"
-        },
-        totalDays: 3,
-        totalHours: "25h 30m",
-        totalTasks: 12,
-        logs: [
-          { date: "2024-06-01", taskType: "Painting", taskName: "Wall Prep", duration: "3h 00m", receiptAmount: "$10.00", location: "3614 Ray Court, Laurinburg" },
-          { date: "2024-06-02", taskType: "Electrical Work", taskName: "Wiring", duration: "2h 30m", receiptAmount: "$0.00", location: "3614 Ray Court, Laurinburg" },
-          { date: "2024-06-03", taskType: "Plumbing", taskName: "Pipe Fix", duration: "2h 00m", receiptAmount: "$15.00", location: "3614 Ray Court, Laurinburg" },
-          { date: "2024-06-03", taskType: "Cleaning", taskName: "Debris Removal", duration: "1h 00m", receiptAmount: "$0.00", location: "3614 Ray Court, Laurinburg" },
-          { date: "2024-06-04", taskType: "Painting", taskName: "Ceiling Paint", duration: "4h 00m", receiptAmount: "$20.00", location: "3614 Ray Court, Laurinburg" },
-          { date: "2024-06-05", taskType: "Electrical Work", taskName: "Outlet Install", duration: "3h 00m", receiptAmount: "$0.00", location: "3614 Ray Court, Laurinburg" },
-          { date: "2024-06-05", taskType: "Cleaning", taskName: "Floor Sweep", duration: "1h 30m", receiptAmount: "$0.00", location: "3614 Ray Court, Laurinburg" },
-          { date: "2024-06-06", taskType: "Painting", taskName: "Trim Paint", duration: "2h 30m", receiptAmount: "$5.00", location: "3614 Ray Court, Laurinburg" },
-          { date: "2024-06-07", taskType: "Plumbing", taskName: "Leak Check", duration: "3h 00m", receiptAmount: "$0.00", location: "3614 Ray Court, Laurinburg" },
-          { date: "2024-06-08", taskType: "Carpentry", taskName: "Frame Repair", duration: "2h 00m", receiptAmount: "$0.00", location: "3614 Ray Court, Laurinburg" },
-          { date: "2024-06-08", taskType: "Cleaning", taskName: "Window Wash", duration: "1h 00m", receiptAmount: "$0.00", location: "3614 Ray Court, Laurinburg" }
-        ],
-        dateRange: "6/1/2024 - 6/8/2024",
-        totalReceiptAmount: "$50.00"
+    {
+      id: 1,
+      user: {
+        name: "John Doe",
+        email: "john@example.com",
+        avatar: "https://i.pravatar.cc/150?img=1",
       },
-      {
-        id: 2,
-        user: {
-          name: "Jane Smith",
-          email: "jane@example.com",
-          avatar: "https://i.pravatar.cc/150?img=2"
-        },
-        totalDays: 2,
-        totalHours: "17h 00m",
-        totalTasks: 6,
-        logs: [
-          { date: "2024-06-02", taskType: "Carpentry", taskName: "Door Install", duration: "4h 00m", receiptAmount: "$0.00", location: "3614 Ray Court, Laurinburg" },
-          { date: "2024-06-03", taskType: "Landscaping", taskName: "Lawn Mow", duration: "2h 00m", receiptAmount: "$8.00", location: "3614 Ray Court, Laurinburg" },
-          { date: "2024-06-04", taskType: "Cleaning", taskName: "Trash Pickup", duration: "2h 30m", receiptAmount: "$0.00", location: "3614 Ray Court, Laurinburg" },
-          { date: "2024-06-05", taskType: "Carpentry", taskName: "Shelf Build", duration: "5h 00m", receiptAmount: "$12.00", location: "3614 Ray Court, Laurinburg" },
-          { date: "2024-06-06", taskType: "Landscaping", taskName: "Hedge Trim", duration: "2h 30m", receiptAmount: "$0.00", location: "3614 Ray Court, Laurinburg" },
-          { date: "2024-06-07", taskType: "Cleaning", taskName: "Garage Sweep", duration: "1h 00m", receiptAmount: "$0.00", location: "3614 Ray Court, Laurinburg" }
-        ],
-        dateRange: "6/2/2024 - 6/7/2024",
-        totalReceiptAmount: "$20.00"
+      totalDays: 3,
+      totalHours: "25h 30m",
+      totalTasks: 12,
+      logs: [
+        { taskType: "Painting", taskName: "Wall Prep" },
+        { taskType: "Electrical Work", taskName: "Wiring" },
+        { taskType: "Plumbing", taskName: "Pipe Fix" },
+        { taskType: "Cleaning", taskName: "Debris Removal" },
+        { taskType: "Painting", taskName: "Ceiling Paint" },
+        { taskType: "Electrical Work", taskName: "Outlet Install" },
+        { taskType: "Cleaning", taskName: "Floor Sweep" },
+        { taskType: "Painting", taskName: "Trim Paint" },
+        { taskType: "Plumbing", taskName: "Leak Check" },
+        { taskType: "Carpentry", taskName: "Frame Repair" },
+        { taskType: "Cleaning", taskName: "Window Wash" },
+      ],
+      dateRange: "6/1/2024 - 6/8/2024",
+      totalReceiptAmount: "$50.00",
+    },
+    {
+      id: 2,
+      user: {
+        name: "Jane Smith",
+        email: "jane@example.com",
+        avatar: "https://i.pravatar.cc/150?img=2",
       },
-      {
-        id: 3,
-        user: {
-          name: "Mark Taylor",
-          email: "mark@example.com",
-          avatar: "https://i.pravatar.cc/150?img=3"
-        },
-        totalDays: 1,
-        totalHours: "8h 30m",
-        totalTasks: 3,
-        logs: [
-          { date: "2024-06-01", taskType: "Electrical Work", taskName: "Light Fixture", duration: "2h 45m", receiptAmount: "$0.00", location: "3614 Ray Court, Laurinburg" },
-          { date: "2024-06-02", taskType: "Plumbing", taskName: "Drain Clean", duration: "3h 15m", receiptAmount: "$7.50", location: "3614 Ray Court, Laurinburg" },
-          { date: "2024-06-03", taskType: "Carpentry", taskName: "Table Repair", duration: "2h 30m", receiptAmount: "$0.00", location: "3614 Ray Court, Laurinburg" }
-        ],
-        dateRange: "6/1/2024 - 6/3/2024",
-        totalReceiptAmount: "$7.50"
-      }
-    ];
+      totalDays: 2,
+      totalHours: "17h 00m",
+      totalTasks: 6,
+      logs: [
+        { taskType: "Carpentry", taskName: "Door Install" },
+        { taskType: "Landscaping", taskName: "Lawn Mow" },
+        { taskType: "Cleaning", taskName: "Trash Pickup" },
+        { taskType: "Carpentry", taskName: "Shelf Build" },
+        { taskType: "Landscaping", taskName: "Hedge Trim" },
+        { taskType: "Cleaning", taskName: "Garage Sweep" },
+      ],
+      dateRange: "6/2/2024 - 6/7/2024",
+      totalReceiptAmount: "$20.00",
+    },
+    {
+      id: 3,
+      user: {
+        name: "Mark Taylor",
+        email: "mark@example.com",
+        avatar: "https://i.pravatar.cc/150?img=3",
+      },
+      totalDays: 1,
+      totalHours: "8h 30m",
+      totalTasks: 3,
+      logs: [
+        { taskType: "Electrical Work", taskName: "Light Fixture" },
+        { taskType: "Plumbing", taskName: "Drain Clean" },
+        { taskType: "Carpentry", taskName: "Table Repair" },
+      ],
+      dateRange: "6/1/2024 - 6/3/2024",
+      totalReceiptAmount: "$7.50",
+    },
+  ];
 
   // Filter user summaries based on username
   const filteredUserSummaries = userSummaries.filter((summary) =>
@@ -290,10 +292,10 @@ export default function SummeryTable() {
 
   const handlePrintReceipt = (receipt: any) => {
     // Create a new window for printing
-    const printWindow = window.open('', '_blank', 'width=800,height=600');
+    const printWindow = window.open("", "_blank", "width=800,height=600");
 
     if (!printWindow) {
-      alert('Please allow popups to print the receipt');
+      alert("Please allow popups to print the receipt");
       return;
     }
 
@@ -506,13 +508,13 @@ export default function SummeryTable() {
           <div class="receipt-footer">
             <p>Thank you for your business!</p>
             <div class="print-date">
-              Printed on: ${new Date().toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    })}
+              Printed on: ${new Date().toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
             </div>
           </div>
         </div>
@@ -551,7 +553,7 @@ export default function SummeryTable() {
 
   const handleExport = () => {
     // Expand all users first
-    const allUserIds = userSummaries.map(summary => summary.id);
+    const allUserIds = userSummaries.map((summary) => summary.id);
     setExpandedUsers(new Set(allUserIds));
 
     // Wait longer for the DOM to update, then export
@@ -561,13 +563,13 @@ export default function SummeryTable() {
 
       // Add header
       csvData.push([
-        '#',
-        'Employee Name',
-        'Email',
-        'Date Range',
-        '#Worked Days',
-        'Total Hours',
-        'Total Receipt Amount'
+        "#",
+        "Employee Name",
+        "Email",
+        "Date Range",
+        "#Worked Days",
+        "Total Hours",
+        "Total Receipt Amount",
       ]);
 
       // Add data rows
@@ -577,23 +579,25 @@ export default function SummeryTable() {
           index + 1,
           userSummary.user.name,
           userSummary.user.email,
-          '-',
+          "-",
           userSummary.totalDays,
           userSummary.totalHours,
-          '-'
+          "-",
         ]);
       });
 
       // Convert to CSV string
-      const csvString = csvData.map(row => row.map(cell => `"${cell}"`).join(',')).join('\n');
+      const csvString = csvData
+        .map((row) => row.map((cell) => `"${cell}"`).join(","))
+        .join("\n");
 
       // Create and download file
-      const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
-      const link = document.createElement('a');
+      const blob = new Blob([csvString], { type: "text/csv;charset=utf-8;" });
+      const link = document.createElement("a");
       const url = URL.createObjectURL(blob);
-      link.setAttribute('href', url);
-      link.setAttribute('download', 'summary_report.csv');
-      link.style.visibility = 'hidden';
+      link.setAttribute("href", url);
+      link.setAttribute("download", "summary_report.csv");
+      link.style.visibility = "hidden";
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -609,18 +613,18 @@ export default function SummeryTable() {
             margin: 0;
             padding: 0;
           }
-          
+
           .print-container {
             padding: 0 !important;
             margin: 0 !important;
           }
-          
+
           .print-table {
             width: 100% !important;
             border-collapse: collapse !important;
             page-break-inside: auto !important;
           }
-          
+
           .print-table th,
           .print-table td {
             border: 1px solid #ddd !important;
@@ -628,25 +632,25 @@ export default function SummeryTable() {
             text-align: left !important;
             page-break-inside: avoid !important;
           }
-          
+
           .print-table tr {
             page-break-inside: avoid !important;
             page-break-after: auto !important;
           }
-          
+
           .print-expanded-content {
             display: block !important;
             page-break-inside: avoid !important;
           }
-          
+
           .print-hidden {
             display: none !important;
           }
-          
+
           .print-button {
             display: none !important;
           }
-          
+
           .print-tooltip {
             display: none !important;
           }
@@ -662,7 +666,8 @@ export default function SummeryTable() {
               placeholder="Filter by username..."
               value={usernameFilter}
               onChange={(e) => setUsernameFilter(e.target.value)}
-              className="w-[200px]" size="lg"
+              className="w-[200px]"
+              size="lg"
             />
           </div>
           <Tooltip content="Export Summary Table">
@@ -679,7 +684,10 @@ export default function SummeryTable() {
         </div>
       </div>
       <div className="overflow-auto w-full border-1 p-3 rounded-lg print-container">
-        <Table aria-label="User Summary with Expandable Logs" className="print-table">
+        <Table
+          aria-label="User Summary with Expandable Logs"
+          className="print-table"
+        >
           <TableHeader>
             <TableRow>
               {columns.map((column) => (
@@ -692,7 +700,6 @@ export default function SummeryTable() {
           <TableBody>
             {filteredUserSummaries.map((userSummary, index) => (
               <React.Fragment key={userSummary.id}>
-
                 {/* Main User Row */}
                 <TableRow className="hover:bg-gray-50 dark:hover:bg-gray-800">
                   <TableCell>
@@ -729,11 +736,7 @@ export default function SummeryTable() {
                       {userSummary.dateRange}
                     </span>
                   </TableCell>
-                  <TableCell>
-                    <Chip size="sm" variant="flat" color="default">
-                      {userSummary.totalDays} days
-                    </Chip>
-                  </TableCell>
+
                   <TableCell>
                     <span className="font-semibold text-[#FF791A]">
                       {userSummary.totalHours}
@@ -756,7 +759,6 @@ export default function SummeryTable() {
                           <EyeIcon className="h-4 w-4" />
                         </Button>
                       </Tooltip>
-
                     </div>
                   </TableCell>
                 </TableRow>
@@ -776,13 +778,18 @@ export default function SummeryTable() {
                           <div className="flex justify-between gap-4">
                             <Select
                               label="Filter by Job Name"
-                              placeholder="Select Job Name"
-                              selectedKeys={selectedJobName ? [selectedJobName] : []}
-                              onChange={(e) => setSelectedJobName(e.target.value)}
-                              className="w-[200px]" size="sm"
-
+                              selectedKeys={
+                                selectedJobName ? [selectedJobName] : []
+                              }
+                              onChange={(e) =>
+                                setSelectedJobName(e.target.value)
+                              }
+                              className="w-[200px]"
+                              size="sm"
                             >
-                              <SelectItem key="" textValue="">All Jobs</SelectItem>
+                              <SelectItem key="" textValue="">
+                                All Jobs
+                              </SelectItem>
                               <>
                                 {uniqueJobNames.map((jobName) => (
                                   <SelectItem key={jobName} textValue={jobName}>
@@ -794,16 +801,24 @@ export default function SummeryTable() {
 
                             <Select
                               label="Filter by Task Type"
-                              placeholder="Select Task Type"
-                              selectedKeys={selectedTaskType ? [selectedTaskType] : []}
-                              onChange={(e) => setSelectedTaskType(e.target.value)}
+                              selectedKeys={
+                                selectedTaskType ? [selectedTaskType] : []
+                              }
+                              onChange={(e) =>
+                                setSelectedTaskType(e.target.value)
+                              }
                               className="w-[200px]"
                               size="sm"
                             >
-                              <SelectItem key="" textValue="">All Tasks</SelectItem>
+                              <SelectItem key="" textValue="">
+                                All Tasks
+                              </SelectItem>
                               <>
                                 {uniqueTaskTypes.map((taskType) => (
-                                  <SelectItem key={taskType} textValue={taskType}>
+                                  <SelectItem
+                                    key={taskType}
+                                    textValue={taskType}
+                                  >
                                     {taskType}
                                   </SelectItem>
                                 ))}
@@ -813,26 +828,47 @@ export default function SummeryTable() {
                         </div>
                         <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
                           {/* Flat logs table */}
-                          <Table aria-label={`Summary for ${userSummary.user.name}`}>
+                          <Table
+                            aria-label={`Summary for ${userSummary.user.name}`}
+                          >
                             <TableHeader>
                               <TableRow>
-                                <TableCell className="font-medium text-xs bg-gray-100 dark:bg-gray-800">Task Name</TableCell>
-                                <TableCell className="font-medium text-xs bg-gray-100 dark:bg-gray-800">Task Type</TableCell>
-                                <TableCell className="font-medium text-xs bg-gray-100 dark:bg-gray-800">Date</TableCell>
-                                <TableCell className="font-medium text-xs bg-gray-100 dark:bg-gray-800">Duration</TableCell>
-                                <TableCell className="font-medium text-xs bg-gray-100 dark:bg-gray-800">Receipt Amount</TableCell>
+                                <TableCell className="font-medium text-xs bg-gray-100 dark:bg-gray-800">
+                                  Job Name
+                                </TableCell>
+                                <TableCell className="font-medium text-xs bg-gray-100 dark:bg-gray-800">
+                                  Task Type
+                                </TableCell>
+
+                                <TableCell className="font-medium text-xs bg-gray-100 dark:bg-gray-800">
+                                  Duration
+                                </TableCell>
+                                <TableCell className="font-medium text-xs bg-gray-100 dark:bg-gray-800">
+                                  Receipt Amount
+                                </TableCell>
                               </TableRow>
                             </TableHeader>
                             <TableBody>
                               {userSummary.logs.map((log, idx) => {
                                 const flatLog = log as FlatLog;
                                 return (
-                                  <TableRow key={flatLog.taskType + idx} className="text-sm">
-                                    <TableCell className="py-2">{flatLog.taskName}</TableCell>
-                                    <TableCell className="py-2">{flatLog.taskType}</TableCell>
-                                    <TableCell className="py-2">{flatLog.date}</TableCell>
-                                    <TableCell className="py-2">{flatLog.duration}</TableCell>
-                                    <TableCell className="py-2">{flatLog.receiptAmount}</TableCell>
+                                  <TableRow
+                                    key={flatLog.taskType + idx}
+                                    className="text-sm"
+                                  >
+                                    <TableCell className="py-2">
+                                      {flatLog.taskName}
+                                    </TableCell>
+                                    <TableCell className="py-2">
+                                      {flatLog.taskType}
+                                    </TableCell>
+
+                                    <TableCell className="py-2">
+                                      {flatLog.duration}
+                                    </TableCell>
+                                    <TableCell className="py-2">
+                                      {flatLog.receiptAmount}
+                                    </TableCell>
                                   </TableRow>
                                 );
                               })}
@@ -862,9 +898,7 @@ export default function SummeryTable() {
         <ModalContent>
           <ModalHeader className="flex flex-col gap-1">
             <h3 className="text-lg font-semibold">Tasks Details</h3>
-            <p className="text-sm text-gray-500">
-              No additional task details.
-            </p>
+            <p className="text-sm text-gray-500">No additional task details.</p>
           </ModalHeader>
           <ModalBody>
             <div className="text-center py-8 text-gray-500 dark:text-gray-400">
@@ -931,7 +965,9 @@ export default function SummeryTable() {
                       <span className="font-medium text-default-700">
                         Purpose:
                       </span>
-                      <p className="text-foreground">{selectedReceipt.purpose}</p>
+                      <p className="text-foreground">
+                        {selectedReceipt.purpose}
+                      </p>
                     </div>
                     <div>
                       <span className="font-medium text-default-700">
