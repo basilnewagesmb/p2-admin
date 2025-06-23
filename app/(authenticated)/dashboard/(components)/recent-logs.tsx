@@ -14,7 +14,8 @@ const columns = [
   { name: "In Time", uid: "in" },
   { name: "Out Time", uid: "out" },
   { name: "Duration", uid: "duration" },
-  { name: "Location", uid: "location" },
+  { name: "Checkin Location", uid: "checkinLocation" },
+  { name: "Checkout Location", uid: "checkoutLocation" },
 ];
 
 const logs = [
@@ -24,7 +25,8 @@ const logs = [
     in: "08:00",
     out: "17:00",
     duration: "8h 30m",
-    location: "3614 Ray Court, Laurinburg",
+    checkinLocation: "3614 Ray Court, Laurinburg",
+    checkoutLocation: "9101 Pine St, Laurinburg",
   },
   {
     id: 2,
@@ -32,7 +34,8 @@ const logs = [
     in: "08:00",
     out: "17:00",
     duration: "8h 30m",
-    location: "3614 Ray Court, Laurinburg",
+    checkinLocation: "3614 Ray Court, Laurinburg",
+    checkoutLocation: "9101 Pine St, Laurinburg",
   },
   {
     id: 3,
@@ -40,7 +43,8 @@ const logs = [
     in: "08:00",
     out: "17:00",
     duration: "8h 30m",
-    location: "3614 Ray Court, Laurinburg",
+    checkinLocation: "3614 Ray Court, Laurinburg",
+    checkoutLocation: "9101 Pine St, Laurinburg",
   },
   {
     id: 4,
@@ -48,7 +52,8 @@ const logs = [
     in: "08:00",
     out: "17:00",
     duration: "8h 30m",
-    location: "3614 Ray Court, Laurinburg",
+    checkinLocation: "3614 Ray Court, Laurinburg",
+    checkoutLocation: "9101 Pine St, Laurinburg",
   },
   {
     id: 5,
@@ -64,7 +69,8 @@ const logs = [
     in: "08:00",
     out: "17:00",
     duration: "8h 30m",
-    location: "3614 Ray Court, Laurinburg",
+    checkinLocation: "3614 Ray Court, Laurinburg",
+    checkoutLocation: "9101 Pine St, Laurinburg",
   },
 ];
 

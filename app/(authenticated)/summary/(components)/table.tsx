@@ -134,6 +134,7 @@ const receiptsData = [
 
 // Add a type for the flat log structure
 interface FlatLog {
+  jobName: string;
   taskType: string;
   taskName: string;
   duration: string;
@@ -234,72 +235,72 @@ export default function SummeryTable() {
     dateRange: string;
     totalReceiptAmount: string;
   }> = [
-    {
-      id: 1,
-      user: {
-        name: "John Doe",
-        email: "john@example.com",
-        avatar: "https://i.pravatar.cc/150?img=1",
+      {
+        id: 1,
+        user: {
+          name: "John Doe",
+          email: "john@example.com",
+          avatar: "https://i.pravatar.cc/150?img=1",
+        },
+        totalDays: 3,
+        totalHours: "25h 30m",
+        totalTasks: 12,
+        logs: [
+          { jobName: jobNames[0].name, taskType: taskNames[0].name, taskName: "Wall Prep", duration: "3h 00m", receiptAmount: "$10.00", location: "Site A" },
+          { jobName: jobNames[1].name, taskType: taskNames[1].name, taskName: "Wiring", duration: "2h 30m", receiptAmount: "$0.00", location: "Site B" },
+          { jobName: jobNames[2].name, taskType: taskNames[11].name, taskName: "Pipe Fix", duration: "2h 00m", receiptAmount: "$15.00", location: "Site C" },
+          { jobName: jobNames[3].name, taskType: taskNames[3].name, taskName: "Debris Removal", duration: "1h 00m", receiptAmount: "$0.00", location: "Site D" },
+          { jobName: jobNames[0].name, taskType: taskNames[0].name, taskName: "Ceiling Paint", duration: "4h 00m", receiptAmount: "$20.00", location: "Site A" },
+          { jobName: jobNames[1].name, taskType: taskNames[1].name, taskName: "Outlet Install", duration: "3h 00m", receiptAmount: "$0.00", location: "Site B" },
+          { jobName: jobNames[4].name, taskType: taskNames[3].name, taskName: "Floor Sweep", duration: "1h 30m", receiptAmount: "$0.00", location: "Site E" },
+          { jobName: jobNames[0].name, taskType: taskNames[0].name, taskName: "Trim Paint", duration: "2h 30m", receiptAmount: "$5.00", location: "Site A" },
+          { jobName: jobNames[2].name, taskType: taskNames[11].name, taskName: "Leak Check", duration: "3h 00m", receiptAmount: "$0.00", location: "Site C" },
+          { jobName: jobNames[5].name, taskType: taskNames[4].name, taskName: "Frame Repair", duration: "2h 00m", receiptAmount: "$0.00", location: "Site F" },
+          { jobName: jobNames[6].name, taskType: taskNames[3].name, taskName: "Window Wash", duration: "1h 00m", receiptAmount: "$0.00", location: "Site G" },
+        ],
+        dateRange: "6/1/2024 - 6/8/2024",
+        totalReceiptAmount: "$50.00",
       },
-      totalDays: 3,
-      totalHours: "25h 30m",
-      totalTasks: 12,
-      logs: [
-        { jobName: jobNames[0].name, taskType: taskNames[0].name, taskName: "Wall Prep", duration: "3h 00m", receiptAmount: "$10.00", location: "Site A" },
-        { jobName: jobNames[1].name, taskType: taskNames[1].name, taskName: "Wiring", duration: "2h 30m", receiptAmount: "$0.00", location: "Site B" },
-        { jobName: jobNames[2].name, taskType: taskNames[11].name, taskName: "Pipe Fix", duration: "2h 00m", receiptAmount: "$15.00", location: "Site C" },
-        { jobName: jobNames[3].name, taskType: taskNames[3].name, taskName: "Debris Removal", duration: "1h 00m", receiptAmount: "$0.00", location: "Site D" },
-        { jobName: jobNames[0].name, taskType: taskNames[0].name, taskName: "Ceiling Paint", duration: "4h 00m", receiptAmount: "$20.00", location: "Site A" },
-        { jobName: jobNames[1].name, taskType: taskNames[1].name, taskName: "Outlet Install", duration: "3h 00m", receiptAmount: "$0.00", location: "Site B" },
-        { jobName: jobNames[4].name, taskType: taskNames[3].name, taskName: "Floor Sweep", duration: "1h 30m", receiptAmount: "$0.00", location: "Site E" },
-        { jobName: jobNames[0].name, taskType: taskNames[0].name, taskName: "Trim Paint", duration: "2h 30m", receiptAmount: "$5.00", location: "Site A" },
-        { jobName: jobNames[2].name, taskType: taskNames[11].name, taskName: "Leak Check", duration: "3h 00m", receiptAmount: "$0.00", location: "Site C" },
-        { jobName: jobNames[5].name, taskType: taskNames[4].name, taskName: "Frame Repair", duration: "2h 00m", receiptAmount: "$0.00", location: "Site F" },
-        { jobName: jobNames[6].name, taskType: taskNames[3].name, taskName: "Window Wash", duration: "1h 00m", receiptAmount: "$0.00", location: "Site G" },
-      ],
-      dateRange: "6/1/2024 - 6/8/2024",
-      totalReceiptAmount: "$50.00",
-    },
-    {
-      id: 2,
-      user: {
-        name: "Jane Smith",
-        email: "jane@example.com",
-        avatar: "https://i.pravatar.cc/150?img=2",
+      {
+        id: 2,
+        user: {
+          name: "Jane Smith",
+          email: "jane@example.com",
+          avatar: "https://i.pravatar.cc/150?img=2",
+        },
+        totalDays: 2,
+        totalHours: "17h 00m",
+        totalTasks: 6,
+        logs: [
+          { jobName: jobNames[7].name, taskType: taskNames[4].name, taskName: "Door Install", duration: "4h 00m", receiptAmount: "$0.00", location: "Site H" },
+          { jobName: jobNames[8].name, taskType: taskNames[10].name, taskName: "Lawn Mow", duration: "2h 00m", receiptAmount: "$8.00", location: "Site I" },
+          { jobName: jobNames[9].name, taskType: taskNames[3].name, taskName: "Trash Pickup", duration: "2h 30m", receiptAmount: "$0.00", location: "Site J" },
+          { jobName: jobNames[10].name, taskType: taskNames[4].name, taskName: "Shelf Build", duration: "5h 00m", receiptAmount: "$12.00", location: "Site K" },
+          { jobName: jobNames[11].name, taskType: taskNames[10].name, taskName: "Hedge Trim", duration: "2h 30m", receiptAmount: "$0.00", location: "Site L" },
+          { jobName: jobNames[12].name, taskType: taskNames[3].name, taskName: "Garage Sweep", duration: "1h 00m", receiptAmount: "$0.00", location: "Site M" },
+        ],
+        dateRange: "6/2/2024 - 6/7/2024",
+        totalReceiptAmount: "$20.00",
       },
-      totalDays: 2,
-      totalHours: "17h 00m",
-      totalTasks: 6,
-      logs: [
-        { jobName: jobNames[7].name, taskType: taskNames[4].name, taskName: "Door Install", duration: "4h 00m", receiptAmount: "$0.00", location: "Site H" },
-        { jobName: jobNames[8].name, taskType: taskNames[10].name, taskName: "Lawn Mow", duration: "2h 00m", receiptAmount: "$8.00", location: "Site I" },
-        { jobName: jobNames[9].name, taskType: taskNames[3].name, taskName: "Trash Pickup", duration: "2h 30m", receiptAmount: "$0.00", location: "Site J" },
-        { jobName: jobNames[10].name, taskType: taskNames[4].name, taskName: "Shelf Build", duration: "5h 00m", receiptAmount: "$12.00", location: "Site K" },
-        { jobName: jobNames[11].name, taskType: taskNames[10].name, taskName: "Hedge Trim", duration: "2h 30m", receiptAmount: "$0.00", location: "Site L" },
-        { jobName: jobNames[12].name, taskType: taskNames[3].name, taskName: "Garage Sweep", duration: "1h 00m", receiptAmount: "$0.00", location: "Site M" },
-      ],
-      dateRange: "6/2/2024 - 6/7/2024",
-      totalReceiptAmount: "$20.00",
-    },
-    {
-      id: 3,
-      user: {
-        name: "Mark Taylor",
-        email: "mark@example.com",
-        avatar: "https://i.pravatar.cc/150?img=3",
+      {
+        id: 3,
+        user: {
+          name: "Mark Taylor",
+          email: "mark@example.com",
+          avatar: "https://i.pravatar.cc/150?img=3",
+        },
+        totalDays: 1,
+        totalHours: "8h 30m",
+        totalTasks: 3,
+        logs: [
+          { jobName: jobNames[0].name, taskType: taskNames[1].name, taskName: "Light Fixture", duration: "2h 45m", receiptAmount: "$0.00", location: "Site N" },
+          { jobName: jobNames[1].name, taskType: taskNames[11].name, taskName: "Drain Clean", duration: "3h 15m", receiptAmount: "$7.50", location: "Site O" },
+          { jobName: jobNames[2].name, taskType: taskNames[4].name, taskName: "Table Repair", duration: "2h 30m", receiptAmount: "$0.00", location: "Site P" },
+        ],
+        dateRange: "6/1/2024 - 6/3/2024",
+        totalReceiptAmount: "$7.50",
       },
-      totalDays: 1,
-      totalHours: "8h 30m",
-      totalTasks: 3,
-      logs: [
-        { jobName: jobNames[0].name, taskType: taskNames[1].name, taskName: "Light Fixture", duration: "2h 45m", receiptAmount: "$0.00", location: "Site N" },
-        { jobName: jobNames[1].name, taskType: taskNames[11].name, taskName: "Drain Clean", duration: "3h 15m", receiptAmount: "$7.50", location: "Site O" },
-        { jobName: jobNames[2].name, taskType: taskNames[4].name, taskName: "Table Repair", duration: "2h 30m", receiptAmount: "$0.00", location: "Site P" },
-      ],
-      dateRange: "6/1/2024 - 6/3/2024",
-      totalReceiptAmount: "$7.50",
-    },
-  ];
+    ];
 
   // Filter user summaries based on username
   const filteredUserSummaries = userSummaries.filter((summary) =>
@@ -540,12 +541,12 @@ export default function SummeryTable() {
             <p>Thank you for your business!</p>
             <div class="print-date">
               Printed on: ${new Date().toLocaleDateString("en-US", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-                hour: "2-digit",
-                minute: "2-digit",
-              })}
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    })}
             </div>
           </div>
         </div>
@@ -888,7 +889,7 @@ export default function SummeryTable() {
                                     className="text-sm"
                                   >
                                     <TableCell className="py-2">
-                                      {flatLog.taskName}
+                                      {flatLog.jobName}
                                     </TableCell>
                                     <TableCell className="py-2">
                                       {flatLog.taskType}

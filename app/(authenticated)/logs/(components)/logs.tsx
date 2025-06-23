@@ -58,7 +58,8 @@ export default function Logs({ detailPage = false }: { detailPage?: boolean }) {
     { name: "Out Time", uid: "out" },
     { name: "Duration", uid: "duration" },
     { name: "Tasks", uid: "tasks" },
-    { name: "Location", uid: "location" },
+    { name: "Checkin Location", uid: "checkinLocation" },
+    { name: "Checkout Location", uid: "checkoutLocation" },
   ];
 
   const logs = [
@@ -80,16 +81,10 @@ export default function Logs({ detailPage = false }: { detailPage?: boolean }) {
             { name: "Painting", hours: "3h 00m" },
             { name: "Electrical Work", hours: "2h 30m" }
           ]
-        },
-        {
-          jobName: "Gristhouse",
-          tasks: [
-            { name: "Plumbing", hours: "2h 00m" },
-            { name: "Cleaning", hours: "1h 00m" }
-          ]
         }
       ],
-      location: "3614 Ray Court, Laurinburg",
+      checkinLocation: "3614 Ray Court, Laurinburg",
+      checkoutLocation: "1234 Main St, Laurinburg",
     },
     {
       id: 2,
@@ -109,15 +104,10 @@ export default function Logs({ detailPage = false }: { detailPage?: boolean }) {
             { name: "Carpentry", hours: "4h 00m" },
             { name: "Landscaping", hours: "2h 00m" }
           ]
-        },
-        {
-          jobName: "4800",
-          tasks: [
-            { name: "Cleaning", hours: "2h 30m" }
-          ]
         }
       ],
-      location: "3614 Ray Court, Laurinburg",
+      checkinLocation: "3614 Ray Court, Laurinburg",
+      checkoutLocation: "5678 Oak St, Laurinburg",
     },
     {
       id: 3,
@@ -137,15 +127,10 @@ export default function Logs({ detailPage = false }: { detailPage?: boolean }) {
             { name: "Electrical Work", hours: "2h 45m" },
             { name: "Plumbing", hours: "3h 15m" }
           ]
-        },
-        {
-          jobName: "My Eye Doctor",
-          tasks: [
-            { name: "Carpentry", hours: "2h 30m" }
-          ]
         }
       ],
-      location: "3614 Ray Court, Laurinburg",
+      checkinLocation: "3614 Ray Court, Laurinburg",
+      checkoutLocation: "9101 Pine St, Laurinburg",
     },
   ];
 
@@ -177,7 +162,8 @@ export default function Logs({ detailPage = false }: { detailPage?: boolean }) {
       'Out Time',
       'Duration',
       'Total Tasks',
-      'Location'
+      'Checkin Location',
+      'Checkout Location'
     ]);
 
     // Add data rows
@@ -191,7 +177,8 @@ export default function Logs({ detailPage = false }: { detailPage?: boolean }) {
         log.out,
         log.duration,
         getTotalTasksCount(log.tasks),
-        log.location
+        log.checkinLocation,
+        log.checkoutLocation
       ]);
     });
 

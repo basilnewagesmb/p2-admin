@@ -14,6 +14,7 @@ export function successToast(data: {
     duration: data.duration || 1500,
     dismissible: data.dismissible || true,
     closeButton: false,
+    
   });
 }
 
