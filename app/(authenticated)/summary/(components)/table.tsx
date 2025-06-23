@@ -54,8 +54,101 @@ interface ISearchParams {
     role: string;
   };
 }
+const receiptsData = [
+  {
+    id: 1,
+    jobName: "Tapville",
+    taskType: "Painting",
+    purpose: "Paint supplies for bathroom renovation",
+    date: "10 Jan 2025",
+    amount: "$85.00",
+    image:
+      "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=200&h=280&fit=crop",
+    user: {
+      name: "Sarah Mitchell",
+      email: "sarah.mitchell@example.com",
+      avatar: "https://i.pravatar.cc/150?img=47",
+    },
+  },
+  {
+    id: 2,
+    jobName: "Gristhouse",
+    taskType: "Drywall",
+    purpose: "Wall materials for interior finishing",
+    date: "09 Jan 2025",
+    amount: "$240.00",
+    image:
+      "https://images.unsplash.com/photo-1586953208448-b95a79798f07?w=200&h=280&fit=crop",
+    user: {
+      name: "Marcus Rodriguez",
+      email: "marcus.rodriguez@example.com",
+      avatar: "https://i.pravatar.cc/150?img=33",
+    },
+  },
+  {
+    id: 3,
+    jobName: "Edgewood Elementary",
+    taskType: "Demo",
+    purpose: "Demolition tools for classroom renovation",
+    date: "08 Jan 2025",
+    amount: "$156.00",
+    image:
+      "https://images.unsplash.com/photo-1586953208448-b95a79798f07?w=200&h=280&fit=crop",
+    user: {
+      name: "Emma Thompson",
+      email: "emma.thompson@example.com",
+      avatar: "https://i.pravatar.cc/150?img=28",
+    },
+  },
+  {
+    id: 4,
+    jobName: "4800",
+    taskType: "Plumbing",
+    purpose: "Plumbing fixtures for kitchen installation",
+    date: "07 Jan 2025",
+    amount: "$95.00",
+    image:
+      "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=200&h=280&fit=crop",
+    user: {
+      name: "David Chen",
+      email: "david.chen@example.com",
+      avatar: "https://i.pravatar.cc/150?img=15",
+    },
+  },
+  {
+    id: 5,
+    jobName: "Oakmont Houses",
+    taskType: "Painting",
+    purpose: "Exterior paint for house renovation",
+    date: "06 Jan 2025",
+    amount: "$67.50",
+    image:
+      "https://images.unsplash.com/photo-1586953208448-b95a79798f07?w=200&h=280&fit=crop",
+    user: {
+      name: "Olivia Johnson",
+      email: "olivia.johnson@example.com",
+      avatar: "https://i.pravatar.cc/150?img=41",
+    },
+  },
+];
+
+// Add a type for the flat log structure
+interface FlatLog {
+  taskType: string;
+  taskName: string;
+  duration: string;
+  receiptAmount: string;
+  location: string;
+  date?: string;
+}
+
 
 export default function SummeryTable() {
+  const uniqueJobNames = Array.from(new Set(receiptsData.map(receipt => receipt.jobName)));
+  const uniqueTaskTypes = Array.from(new Set(receiptsData.map(receipt => receipt.taskType)));
+
+  const [selectedJobName, setSelectedJobName] = useState<string>("");
+  const [selectedTaskType, setSelectedTaskType] = useState<string>("");
   const [selectedUser, setSelectedUser] = useState<any>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [expandedUsers, setExpandedUsers] = useState<Set<number>>(new Set());
@@ -97,204 +190,83 @@ export default function SummeryTable() {
     { name: "Actions", uid: "actions" },
   ];
 
-  // Sample data with user summaries and their individual logs
-  const userSummaries = [
-    {
-      id: 1,
-      user: {
-        name: "John Doe",
-        email: "john@example.com",
-        avatar: "https://i.pravatar.cc/150?img=1",
+  // In userSummaries, type logs as FlatLog[]
+  const userSummaries: Array<{
+    id: number;
+    user: { name: string; email: string; avatar: string };
+    totalDays: number;
+    totalHours: string;
+    totalTasks: number;
+    logs: FlatLog[];
+    dateRange: string;
+    totalReceiptAmount: string;
+  }> = [
+      {
+        id: 1,
+        user: {
+          name: "John Doe",
+          email: "john@example.com",
+          avatar: "https://i.pravatar.cc/150?img=1"
+        },
+        totalDays: 3,
+        totalHours: "25h 30m",
+        totalTasks: 12,
+        logs: [
+          { date: "2024-06-01", taskType: "Painting", taskName: "Wall Prep", duration: "3h 00m", receiptAmount: "$10.00", location: "3614 Ray Court, Laurinburg" },
+          { date: "2024-06-02", taskType: "Electrical Work", taskName: "Wiring", duration: "2h 30m", receiptAmount: "$0.00", location: "3614 Ray Court, Laurinburg" },
+          { date: "2024-06-03", taskType: "Plumbing", taskName: "Pipe Fix", duration: "2h 00m", receiptAmount: "$15.00", location: "3614 Ray Court, Laurinburg" },
+          { date: "2024-06-03", taskType: "Cleaning", taskName: "Debris Removal", duration: "1h 00m", receiptAmount: "$0.00", location: "3614 Ray Court, Laurinburg" },
+          { date: "2024-06-04", taskType: "Painting", taskName: "Ceiling Paint", duration: "4h 00m", receiptAmount: "$20.00", location: "3614 Ray Court, Laurinburg" },
+          { date: "2024-06-05", taskType: "Electrical Work", taskName: "Outlet Install", duration: "3h 00m", receiptAmount: "$0.00", location: "3614 Ray Court, Laurinburg" },
+          { date: "2024-06-05", taskType: "Cleaning", taskName: "Floor Sweep", duration: "1h 30m", receiptAmount: "$0.00", location: "3614 Ray Court, Laurinburg" },
+          { date: "2024-06-06", taskType: "Painting", taskName: "Trim Paint", duration: "2h 30m", receiptAmount: "$5.00", location: "3614 Ray Court, Laurinburg" },
+          { date: "2024-06-07", taskType: "Plumbing", taskName: "Leak Check", duration: "3h 00m", receiptAmount: "$0.00", location: "3614 Ray Court, Laurinburg" },
+          { date: "2024-06-08", taskType: "Carpentry", taskName: "Frame Repair", duration: "2h 00m", receiptAmount: "$0.00", location: "3614 Ray Court, Laurinburg" },
+          { date: "2024-06-08", taskType: "Cleaning", taskName: "Window Wash", duration: "1h 00m", receiptAmount: "$0.00", location: "3614 Ray Court, Laurinburg" }
+        ],
+        dateRange: "6/1/2024 - 6/8/2024",
+        totalReceiptAmount: "$50.00"
       },
-      totalDays: 3,
-      totalHours: "25h 30m",
-      totalTasks: 12,
-      logs: [
-        {
-          id: 101,
-          date: "30 Jun 2025",
-          in: "08:00",
-          out: "17:00",
-          duration: "8h 30m",
-          tasks: [
-            { name: "Painting", hours: "3h 00m" },
-            { name: "Electrical Work", hours: "2h 30m" },
-            { name: "Plumbing", hours: "2h 00m" },
-            { name: "Cleaning", hours: "1h 00m" },
-          ],
-          location: "3614 Ray Court, Laurinburg",
+      {
+        id: 2,
+        user: {
+          name: "Jane Smith",
+          email: "jane@example.com",
+          avatar: "https://i.pravatar.cc/150?img=2"
         },
-        {
-          id: 102,
-          date: "29 Jun 2025",
-          in: "08:15",
-          out: "17:15",
-          duration: "8h 30m",
-          tasks: [
-            { name: "Painting", hours: "4h 00m" },
-            { name: "Electrical Work", hours: "3h 00m" },
-            { name: "Cleaning", hours: "1h 30m" },
-          ],
-          location: "3614 Ray Court, Laurinburg",
-        },
-        {
-          id: 103,
-          date: "28 Jun 2025",
-          in: "08:00",
-          out: "16:30",
-          duration: "8h 30m",
-          tasks: [
-            { name: "Painting", hours: "2h 30m" },
-            { name: "Plumbing", hours: "3h 00m" },
-            { name: "Carpentry", hours: "2h 00m" },
-            { name: "Cleaning", hours: "1h 00m" },
-          ],
-          location: "3614 Ray Court, Laurinburg",
-        },
-      ],
-      receipts: [
-        {
-          id: 1001,
-          jobName: "Tapville",
-          taskType: "Painting",
-          purpose: "Paint supplies for bathroom renovation",
-          date: "30 Jun 2025",
-          amount: "$150.00",
-          image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=200&h=280&fit=crop",
-          user: {
-            name: "John Doe",
-            email: "john@example.com",
-            avatar: "https://i.pravatar.cc/150?img=1",
-          },
-        },
-        {
-          id: 1002,
-          jobName: "Gristhouse",
-          taskType: "Drywall",
-          purpose: "Wall materials for interior finishing",
-          date: "29 Jun 2025",
-          amount: "$75.50",
-          image: "https://images.unsplash.com/photo-1586953208448-b95a79798f07?w=200&h=280&fit=crop",
-          user: {
-            name: "John Doe",
-            email: "john@example.com",
-            avatar: "https://i.pravatar.cc/150?img=1",
-          },
-        },
-      ],
-    },
-    {
-      id: 2,
-      user: {
-        name: "Jane Smith",
-        email: "jane@example.com",
-        avatar: "https://i.pravatar.cc/150?img=2",
+        totalDays: 2,
+        totalHours: "17h 00m",
+        totalTasks: 6,
+        logs: [
+          { date: "2024-06-02", taskType: "Carpentry", taskName: "Door Install", duration: "4h 00m", receiptAmount: "$0.00", location: "3614 Ray Court, Laurinburg" },
+          { date: "2024-06-03", taskType: "Landscaping", taskName: "Lawn Mow", duration: "2h 00m", receiptAmount: "$8.00", location: "3614 Ray Court, Laurinburg" },
+          { date: "2024-06-04", taskType: "Cleaning", taskName: "Trash Pickup", duration: "2h 30m", receiptAmount: "$0.00", location: "3614 Ray Court, Laurinburg" },
+          { date: "2024-06-05", taskType: "Carpentry", taskName: "Shelf Build", duration: "5h 00m", receiptAmount: "$12.00", location: "3614 Ray Court, Laurinburg" },
+          { date: "2024-06-06", taskType: "Landscaping", taskName: "Hedge Trim", duration: "2h 30m", receiptAmount: "$0.00", location: "3614 Ray Court, Laurinburg" },
+          { date: "2024-06-07", taskType: "Cleaning", taskName: "Garage Sweep", duration: "1h 00m", receiptAmount: "$0.00", location: "3614 Ray Court, Laurinburg" }
+        ],
+        dateRange: "6/2/2024 - 6/7/2024",
+        totalReceiptAmount: "$20.00"
       },
-      totalDays: 2,
-      totalHours: "17h 00m",
-      totalTasks: 6,
-      logs: [
-        {
-          id: 201,
-          date: "29 Jun 2025",
-          in: "08:00",
-          out: "17:00",
-          duration: "8h 30m",
-          tasks: [
-            { name: "Carpentry", hours: "4h 00m" },
-            { name: "Landscaping", hours: "2h 00m" },
-            { name: "Cleaning", hours: "2h 30m" },
-          ],
-          location: "3614 Ray Court, Laurinburg",
+      {
+        id: 3,
+        user: {
+          name: "Mark Taylor",
+          email: "mark@example.com",
+          avatar: "https://i.pravatar.cc/150?img=3"
         },
-        {
-          id: 202,
-          date: "28 Jun 2025",
-          in: "08:30",
-          out: "17:00",
-          duration: "8h 30m",
-          tasks: [
-            { name: "Carpentry", hours: "5h 00m" },
-            { name: "Landscaping", hours: "2h 30m" },
-            { name: "Cleaning", hours: "1h 00m" },
-          ],
-          location: "3614 Ray Court, Laurinburg",
-        },
-      ],
-      receipts: [
-        {
-          id: 2001,
-          jobName: "Edgewood Elementary",
-          taskType: "Demo",
-          purpose: "Demolition tools for classroom renovation",
-          date: "29 Jun 2025",
-          amount: "$100.00",
-          image: "https://images.unsplash.com/photo-1586953208448-b95a79798f07?w=200&h=280&fit=crop",
-          user: {
-            name: "Jane Smith",
-            email: "jane@example.com",
-            avatar: "https://i.pravatar.cc/150?img=2",
-          },
-        },
-        {
-          id: 2002,
-          jobName: "4800",
-          taskType: "Plumbing",
-          purpose: "Plumbing fixtures for kitchen installation",
-          date: "28 Jun 2025",
-          amount: "$50.00",
-          image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=200&h=280&fit=crop",
-          user: {
-            name: "Jane Smith",
-            email: "jane@example.com",
-            avatar: "https://i.pravatar.cc/150?img=2",
-          },
-        },
-      ],
-    },
-    {
-      id: 3,
-      user: {
-        name: "Mark Taylor",
-        email: "mark@example.com",
-        avatar: "https://i.pravatar.cc/150?img=3",
-      },
-      totalDays: 1,
-      totalHours: "8h 30m",
-      totalTasks: 3,
-      logs: [
-        {
-          id: 301,
-          date: "28 Jun 2025",
-          in: "08:00",
-          out: "17:00",
-          duration: "8h 30m",
-          tasks: [
-            { name: "Electrical Work", hours: "2h 45m" },
-            { name: "Plumbing", hours: "3h 15m" },
-            { name: "Carpentry", hours: "2h 30m" },
-          ],
-          location: "3614 Ray Court, Laurinburg",
-        },
-      ],
-      receipts: [
-        {
-          id: 3001,
-          jobName: "Oakmont Houses",
-          taskType: "Painting",
-          purpose: "Exterior paint for house renovation",
-          date: "28 Jun 2025",
-          amount: "$75.00",
-          image: "https://images.unsplash.com/photo-1586953208448-b95a79798f07?w=200&h=280&fit=crop",
-          user: {
-            name: "Mark Taylor",
-            email: "mark@example.com",
-            avatar: "https://i.pravatar.cc/150?img=3",
-          },
-        },
-      ],
-    },
-  ];
+        totalDays: 1,
+        totalHours: "8h 30m",
+        totalTasks: 3,
+        logs: [
+          { date: "2024-06-01", taskType: "Electrical Work", taskName: "Light Fixture", duration: "2h 45m", receiptAmount: "$0.00", location: "3614 Ray Court, Laurinburg" },
+          { date: "2024-06-02", taskType: "Plumbing", taskName: "Drain Clean", duration: "3h 15m", receiptAmount: "$7.50", location: "3614 Ray Court, Laurinburg" },
+          { date: "2024-06-03", taskType: "Carpentry", taskName: "Table Repair", duration: "2h 30m", receiptAmount: "$0.00", location: "3614 Ray Court, Laurinburg" }
+        ],
+        dateRange: "6/1/2024 - 6/3/2024",
+        totalReceiptAmount: "$7.50"
+      }
+    ];
 
   // Filter user summaries based on username
   const filteredUserSummaries = userSummaries.filter((summary) =>
@@ -600,17 +572,15 @@ export default function SummeryTable() {
 
       // Add data rows
       filteredUserSummaries.forEach((userSummary, index) => {
-        const totalReceiptAmount = userSummary.receipts.reduce((total: number, receipt: any) =>
-          total + parseFloat(receipt.amount.replace('$', '')), 0).toFixed(2);
-
+        // No receipts, so set totalReceiptAmount to '-'
         csvData.push([
           index + 1,
           userSummary.user.name,
           userSummary.user.email,
-          `${userSummary.logs[0]?.date} - ${userSummary.logs[userSummary.logs.length - 1]?.date}`,
+          '-',
           userSummary.totalDays,
           userSummary.totalHours,
-          `$${totalReceiptAmount}`
+          '-'
         ]);
       });
 
@@ -722,6 +692,7 @@ export default function SummeryTable() {
           <TableBody>
             {filteredUserSummaries.map((userSummary, index) => (
               <React.Fragment key={userSummary.id}>
+
                 {/* Main User Row */}
                 <TableRow className="hover:bg-gray-50 dark:hover:bg-gray-800">
                   <TableCell>
@@ -755,7 +726,7 @@ export default function SummeryTable() {
                   </TableCell>
                   <TableCell>
                     <span className="text-sm text-gray-600 dark:text-gray-400">
-                      {userSummary.logs[0]?.date} - {userSummary.logs[userSummary.logs.length - 1]?.date}
+                      {userSummary.dateRange}
                     </span>
                   </TableCell>
                   <TableCell>
@@ -770,8 +741,7 @@ export default function SummeryTable() {
                   </TableCell>
                   <TableCell>
                     <span className="font-semibold text-green-600">
-                      ${userSummary.receipts.reduce((total: number, receipt: any) =>
-                        total + parseFloat(receipt.amount.replace('$', '')), 0).toFixed(2)}
+                      {userSummary.totalReceiptAmount}
                     </span>
                   </TableCell>
                   <TableCell>
@@ -803,167 +773,71 @@ export default function SummeryTable() {
                           <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300">
                             Logs for {userSummary.user.name}
                           </h4>
-                          <div className="flex items-center gap-2">
-                            <Button
-                              size="sm"
-                              variant={viewMode === "logs" ? "solid" : "flat"}
-                              color="primary"
-                              className="text-white"
-                              onClick={() => setViewMode("logs")}
-                            >
-                              Logs
-                            </Button>
-                            <Button
-                              size="sm"
-                              variant={viewMode === "receipts" ? "solid" : "flat"}
-                              color="primary" className="text-white"
+                          <div className="flex justify-between gap-4">
+                            <Select
+                              label="Filter by Job Name"
+                              placeholder="Select Job Name"
+                              selectedKeys={selectedJobName ? [selectedJobName] : []}
+                              onChange={(e) => setSelectedJobName(e.target.value)}
+                              className="w-[200px]" size="sm"
 
-                              onClick={() => setViewMode("receipts")}
                             >
-                              Receipts
-                            </Button>
+                              <SelectItem key="" textValue="">All Jobs</SelectItem>
+                              <>
+                                {uniqueJobNames.map((jobName) => (
+                                  <SelectItem key={jobName} textValue={jobName}>
+                                    {jobName}
+                                  </SelectItem>
+                                ))}
+                              </>
+                            </Select>
+
+                            <Select
+                              label="Filter by Task Type"
+                              placeholder="Select Task Type"
+                              selectedKeys={selectedTaskType ? [selectedTaskType] : []}
+                              onChange={(e) => setSelectedTaskType(e.target.value)}
+                              className="w-[200px]"
+                              size="sm"
+                            >
+                              <SelectItem key="" textValue="">All Tasks</SelectItem>
+                              <>
+                                {uniqueTaskTypes.map((taskType) => (
+                                  <SelectItem key={taskType} textValue={taskType}>
+                                    {taskType}
+                                  </SelectItem>
+                                ))}
+                              </>
+                            </Select>
                           </div>
                         </div>
                         <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
-                          {viewMode === "logs" ? (
-                            <Table aria-label={`Logs for ${userSummary.user.name}`}>
-                              <TableHeader>
-                                <TableRow>
-                                  {logColumns.map((column) => (
-                                    <TableCell
-                                      key={column.uid}
-                                      className="font-medium text-xs bg-gray-100 dark:bg-gray-800"
-                                    >
-                                      {column.name}
-                                    </TableCell>
-                                  ))}
-                                </TableRow>
-                              </TableHeader>
-                              <TableBody>
-                                {userSummary.logs.map((log, index) => (
-                                  <TableRow key={log.id} className="text-sm">
-                                    <TableCell className="py-2">
-                                      <span className="text-sm text-gray-600 dark:text-gray-400">
-                                        {index + 1}
-                                      </span>
-                                    </TableCell>
-                                    {logColumns.slice(1).map((column) => (
-                                      <TableCell
-                                        key={column.uid}
-                                        className="py-2"
-                                      >
-                                        {column.uid === "tasks" ? (
-                                          <Button
-                                            size="sm"
-                                            variant="flat"
-                                            color="primary"
-                                            onClick={() => handleTasksClick(log)}
-                                          >
-                                            <span className="text-[#FF791A]">
-                                              {log.tasks.length} Tasks
-                                            </span>
-                                          </Button>
-                                        ) : (
-                                          String(
-                                            log[column.uid as keyof typeof log] ??
-                                            ""
-                                          )
-                                        )}
-                                      </TableCell>
-                                    ))}
+                          {/* Flat logs table */}
+                          <Table aria-label={`Summary for ${userSummary.user.name}`}>
+                            <TableHeader>
+                              <TableRow>
+                                <TableCell className="font-medium text-xs bg-gray-100 dark:bg-gray-800">Task Name</TableCell>
+                                <TableCell className="font-medium text-xs bg-gray-100 dark:bg-gray-800">Task Type</TableCell>
+                                <TableCell className="font-medium text-xs bg-gray-100 dark:bg-gray-800">Date</TableCell>
+                                <TableCell className="font-medium text-xs bg-gray-100 dark:bg-gray-800">Duration</TableCell>
+                                <TableCell className="font-medium text-xs bg-gray-100 dark:bg-gray-800">Receipt Amount</TableCell>
+                              </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                              {userSummary.logs.map((log, idx) => {
+                                const flatLog = log as FlatLog;
+                                return (
+                                  <TableRow key={flatLog.taskType + idx} className="text-sm">
+                                    <TableCell className="py-2">{flatLog.taskName}</TableCell>
+                                    <TableCell className="py-2">{flatLog.taskType}</TableCell>
+                                    <TableCell className="py-2">{flatLog.date}</TableCell>
+                                    <TableCell className="py-2">{flatLog.duration}</TableCell>
+                                    <TableCell className="py-2">{flatLog.receiptAmount}</TableCell>
                                   </TableRow>
-                                ))}
-                              </TableBody>
-                            </Table>
-                          ) : (
-                            <Table aria-label={`Receipts for ${userSummary.user.name}`}>
-                              <TableHeader>
-                                <TableRow>
-                                  {receiptColumns.map((column) => (
-                                    <TableCell
-                                      key={column.uid}
-                                      className="font-medium text-xs bg-gray-100 dark:bg-gray-800"
-                                    >
-                                      {column.name}
-                                    </TableCell>
-                                  ))}
-                                </TableRow>
-                              </TableHeader>
-                              <TableBody>
-                                {userSummary.receipts?.map((receipt, index) => (
-                                  <TableRow key={receipt.id} className="text-sm">
-                                    <TableCell className="py-2">
-                                      <span className="text-sm text-gray-600 dark:text-gray-400">
-                                        {index + 1}
-                                      </span>
-                                    </TableCell>
-                                    <TableCell className="py-2">
-                                      <User
-                                        name={receipt.user.name}
-                                        description={receipt.user.email}
-                                        avatarProps={{
-                                          src: receipt.user.avatar,
-                                        }}
-                                      />
-                                    </TableCell>
-                                    <TableCell className="py-2">
-                                      <div className="font-semibold">{receipt.jobName}</div>
-                                    </TableCell>
-                                    <TableCell className="py-2">
-                                      <div className="text-sm text-default-600">{receipt.taskType}</div>
-                                    </TableCell>
-                                    <TableCell className="py-2">
-                                      <div className="text-sm text-default-600">{receipt.purpose}</div>
-                                    </TableCell>
-                                    <TableCell className="py-2">
-                                      {receipt.date}
-                                    </TableCell>
-                                    <TableCell className="py-2">
-                                      {receipt.amount}
-                                    </TableCell>
-                                    <TableCell className="py-2">
-                                      <div onClick={() => handleReceiptClick(receipt)}>
-                                        <Image
-                                          alt="Receipt"
-                                          className="object-cover cursor-pointer"
-                                          src={receipt.image}
-                                          width={40}
-                                          height={40}
-                                        />
-                                      </div>
-                                    </TableCell>
-                                    <TableCell className="py-2">
-                                      <div className="flex gap-2">
-                                        <Button
-                                          isIconOnly
-                                          size="sm"
-                                          variant="light"
-                                          color="primary"
-                                          onPress={() => handlePrintReceipt(receipt)}
-                                        >
-                                          <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            width="16"
-                                            height="16"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            strokeWidth="2"
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                          >
-                                            <polyline points="6 9 6 2 18 2 18 9" />
-                                            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
-                                            <rect x="6" y="14" width="12" height="8" />
-                                          </svg>
-                                        </Button>
-                                      </div>
-                                    </TableCell>
-                                  </TableRow>
-                                ))}
-                              </TableBody>
-                            </Table>
-                          )}
+                                );
+                              })}
+                            </TableBody>
+                          </Table>
                         </div>
                       </div>
                     </TableCell>
@@ -989,34 +863,12 @@ export default function SummeryTable() {
           <ModalHeader className="flex flex-col gap-1">
             <h3 className="text-lg font-semibold">Tasks Details</h3>
             <p className="text-sm text-gray-500">
-              {selectedUser?.date} • {selectedUser?.duration}
+              No additional task details.
             </p>
           </ModalHeader>
           <ModalBody>
-            <div className="space-y-4">
-              {selectedUser?.tasks?.map((task: any, index: number) => (
-                <div
-                  key={index}
-                  className="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-800 rounded-lg"
-                >
-                  <div className="flex-1">
-                    <h4 className="font-medium text-gray-900 dark:text-gray-100">
-                      {task.name}
-                    </h4>
-                  </div>
-                  <div className="text-right">
-                    <span className="text-sm font-semibold text-[#FF791A] dark:text-[#FF791A]">
-                      {task.hours}
-                    </span>
-                  </div>
-                </div>
-              ))}
-
-              {selectedUser?.tasks?.length === 0 && (
-                <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-                  No tasks recorded for this day
-                </div>
-              )}
+            <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+              No tasks recorded for this day
             </div>
           </ModalBody>
           <ModalFooter></ModalFooter>

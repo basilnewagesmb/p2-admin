@@ -109,7 +109,7 @@ export function DateRangePickerComponent({
           <DateRangePicker
             value={startDate && endDate ? { start: startDate, end: endDate } : undefined}
             onChange={handleDateChange}
-            label={startDateLabel}
+            label={"Select Date Range"}
             size="sm"
           />
         </div>
