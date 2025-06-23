@@ -193,13 +193,44 @@ export default function SummeryTable() {
   ];
 
   // In userSummaries, type logs as FlatLog[]
+  const taskNames = [
+    { id: 1, name: "Painting", description: "All painting services including interior and exterior.", status: "active", createdDate: "10 Jan 2025" },
+    { id: 2, name: "Drywall", description: "Drywall installation, repair, and finishing.", status: "active", createdDate: "09 Jan 2025" },
+    { id: 3, name: "Demo", description: "Demolition and removal services.", status: "active", createdDate: "08 Jan 2025" },
+    { id: 4, name: "Casework", description: "Custom cabinetry and casework installation.", status: "active", createdDate: "07 Jan 2025" },
+    { id: 5, name: "Flooring", description: "Flooring installation and repair.", status: "inactive", createdDate: "06 Jan 2025" },
+    { id: 6, name: "Bathrooms", description: "Bathroom remodeling and fixture installation.", status: "active", createdDate: "05 Jan 2025" },
+    { id: 7, name: "Concrete", description: "Concrete pouring and finishing services.", status: "active", createdDate: "04 Jan 2025" },
+    { id: 8, name: "Doors", description: "Door installation and repair.", status: "active", createdDate: "03 Jan 2025" },
+    { id: 9, name: "Elevator", description: "Elevator installation and maintenance.", status: "active", createdDate: "02 Jan 2025" },
+    { id: 10, name: "Extra", description: "Additional or miscellaneous services.", status: "inactive", createdDate: "01 Jan 2025" },
+    { id: 11, name: "Landscape", description: "Landscaping and garden maintenance.", status: "active", createdDate: "31 Dec 2024" },
+    { id: 12, name: "Plumbing", description: "Plumbing installation and repair.", status: "active", createdDate: "30 Dec 2024" },
+  ];
+  const jobNames = [
+    { id: 1, name: "Tapville", description: "Tapville project and related services.", status: "active", createdDate: "10 Jan 2025" },
+    { id: 2, name: "Gristhouse", description: "Gristhouse construction and maintenance.", status: "active", createdDate: "09 Jan 2025" },
+    { id: 3, name: "Edgewood Elementary", description: "Edgewood Elementary school renovations.", status: "active", createdDate: "08 Jan 2025" },
+    { id: 4, name: "4800", description: "Project 4800 general contracting.", status: "active", createdDate: "07 Jan 2025" },
+    { id: 5, name: "Oakmont Houses", description: "Oakmont Houses residential work.", status: "inactive", createdDate: "06 Jan 2025" },
+    { id: 6, name: "My Eye Doctor", description: "My Eye Doctor office buildout.", status: "active", createdDate: "05 Jan 2025" },
+    { id: 7, name: "Snyder Pharmacy", description: "Snyder Pharmacy construction.", status: "active", createdDate: "04 Jan 2025" },
+    { id: 8, name: "NPL", description: "NPL facility improvements.", status: "active", createdDate: "03 Jan 2025" },
+    { id: 9, name: "MPLX", description: "MPLX project management.", status: "active", createdDate: "02 Jan 2025" },
+    { id: 10, name: "LK Bundt", description: "LK Bundt bakery fit-out.", status: "inactive", createdDate: "01 Jan 2025" },
+    { id: 11, name: "Lehman Residence", description: "Lehman Residence remodeling.", status: "active", createdDate: "31 Dec 2024" },
+    { id: 12, name: "Klueber Residence", description: "Klueber Residence improvements.", status: "active", createdDate: "30 Dec 2024" },
+    { id: 13, name: "Christian Academy", description: "Christian Academy campus upgrades.", status: "active", createdDate: "29 Dec 2024" },
+  ];
+
+  // Updated userSummaries: logs now include jobName and taskType from above arrays
   const userSummaries: Array<{
     id: number;
     user: { name: string; email: string; avatar: string };
     totalDays: number;
     totalHours: string;
     totalTasks: number;
-    logs: { taskType: string; taskName: string }[];
+    logs: { jobName: string; taskType: string; taskName: string; duration: string; receiptAmount: string; location: string }[];
     dateRange: string;
     totalReceiptAmount: string;
   }> = [
@@ -214,17 +245,17 @@ export default function SummeryTable() {
       totalHours: "25h 30m",
       totalTasks: 12,
       logs: [
-        { taskType: "Painting", taskName: "Wall Prep" },
-        { taskType: "Electrical Work", taskName: "Wiring" },
-        { taskType: "Plumbing", taskName: "Pipe Fix" },
-        { taskType: "Cleaning", taskName: "Debris Removal" },
-        { taskType: "Painting", taskName: "Ceiling Paint" },
-        { taskType: "Electrical Work", taskName: "Outlet Install" },
-        { taskType: "Cleaning", taskName: "Floor Sweep" },
-        { taskType: "Painting", taskName: "Trim Paint" },
-        { taskType: "Plumbing", taskName: "Leak Check" },
-        { taskType: "Carpentry", taskName: "Frame Repair" },
-        { taskType: "Cleaning", taskName: "Window Wash" },
+        { jobName: jobNames[0].name, taskType: taskNames[0].name, taskName: "Wall Prep", duration: "3h 00m", receiptAmount: "$10.00", location: "Site A" },
+        { jobName: jobNames[1].name, taskType: taskNames[1].name, taskName: "Wiring", duration: "2h 30m", receiptAmount: "$0.00", location: "Site B" },
+        { jobName: jobNames[2].name, taskType: taskNames[11].name, taskName: "Pipe Fix", duration: "2h 00m", receiptAmount: "$15.00", location: "Site C" },
+        { jobName: jobNames[3].name, taskType: taskNames[3].name, taskName: "Debris Removal", duration: "1h 00m", receiptAmount: "$0.00", location: "Site D" },
+        { jobName: jobNames[0].name, taskType: taskNames[0].name, taskName: "Ceiling Paint", duration: "4h 00m", receiptAmount: "$20.00", location: "Site A" },
+        { jobName: jobNames[1].name, taskType: taskNames[1].name, taskName: "Outlet Install", duration: "3h 00m", receiptAmount: "$0.00", location: "Site B" },
+        { jobName: jobNames[4].name, taskType: taskNames[3].name, taskName: "Floor Sweep", duration: "1h 30m", receiptAmount: "$0.00", location: "Site E" },
+        { jobName: jobNames[0].name, taskType: taskNames[0].name, taskName: "Trim Paint", duration: "2h 30m", receiptAmount: "$5.00", location: "Site A" },
+        { jobName: jobNames[2].name, taskType: taskNames[11].name, taskName: "Leak Check", duration: "3h 00m", receiptAmount: "$0.00", location: "Site C" },
+        { jobName: jobNames[5].name, taskType: taskNames[4].name, taskName: "Frame Repair", duration: "2h 00m", receiptAmount: "$0.00", location: "Site F" },
+        { jobName: jobNames[6].name, taskType: taskNames[3].name, taskName: "Window Wash", duration: "1h 00m", receiptAmount: "$0.00", location: "Site G" },
       ],
       dateRange: "6/1/2024 - 6/8/2024",
       totalReceiptAmount: "$50.00",
@@ -240,12 +271,12 @@ export default function SummeryTable() {
       totalHours: "17h 00m",
       totalTasks: 6,
       logs: [
-        { taskType: "Carpentry", taskName: "Door Install" },
-        { taskType: "Landscaping", taskName: "Lawn Mow" },
-        { taskType: "Cleaning", taskName: "Trash Pickup" },
-        { taskType: "Carpentry", taskName: "Shelf Build" },
-        { taskType: "Landscaping", taskName: "Hedge Trim" },
-        { taskType: "Cleaning", taskName: "Garage Sweep" },
+        { jobName: jobNames[7].name, taskType: taskNames[4].name, taskName: "Door Install", duration: "4h 00m", receiptAmount: "$0.00", location: "Site H" },
+        { jobName: jobNames[8].name, taskType: taskNames[10].name, taskName: "Lawn Mow", duration: "2h 00m", receiptAmount: "$8.00", location: "Site I" },
+        { jobName: jobNames[9].name, taskType: taskNames[3].name, taskName: "Trash Pickup", duration: "2h 30m", receiptAmount: "$0.00", location: "Site J" },
+        { jobName: jobNames[10].name, taskType: taskNames[4].name, taskName: "Shelf Build", duration: "5h 00m", receiptAmount: "$12.00", location: "Site K" },
+        { jobName: jobNames[11].name, taskType: taskNames[10].name, taskName: "Hedge Trim", duration: "2h 30m", receiptAmount: "$0.00", location: "Site L" },
+        { jobName: jobNames[12].name, taskType: taskNames[3].name, taskName: "Garage Sweep", duration: "1h 00m", receiptAmount: "$0.00", location: "Site M" },
       ],
       dateRange: "6/2/2024 - 6/7/2024",
       totalReceiptAmount: "$20.00",
@@ -261,9 +292,9 @@ export default function SummeryTable() {
       totalHours: "8h 30m",
       totalTasks: 3,
       logs: [
-        { taskType: "Electrical Work", taskName: "Light Fixture" },
-        { taskType: "Plumbing", taskName: "Drain Clean" },
-        { taskType: "Carpentry", taskName: "Table Repair" },
+        { jobName: jobNames[0].name, taskType: taskNames[1].name, taskName: "Light Fixture", duration: "2h 45m", receiptAmount: "$0.00", location: "Site N" },
+        { jobName: jobNames[1].name, taskType: taskNames[11].name, taskName: "Drain Clean", duration: "3h 15m", receiptAmount: "$7.50", location: "Site O" },
+        { jobName: jobNames[2].name, taskType: taskNames[4].name, taskName: "Table Repair", duration: "2h 30m", receiptAmount: "$0.00", location: "Site P" },
       ],
       dateRange: "6/1/2024 - 6/3/2024",
       totalReceiptAmount: "$7.50",
