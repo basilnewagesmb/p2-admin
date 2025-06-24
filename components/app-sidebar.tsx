@@ -22,6 +22,7 @@ import {
   CircleCheckBig,
   FolderPen,
   Target,
+  Bell,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -77,6 +78,11 @@ const items = [
     title: "Task Types",
     url: "/task-types",
     icon: CircleCheckBig,
+  },
+  {
+    title: "Announcements",
+    url: "/announcements",
+    icon: Bell,
   },
 ];
 
