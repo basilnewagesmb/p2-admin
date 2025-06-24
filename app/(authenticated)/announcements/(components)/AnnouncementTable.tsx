@@ -11,6 +11,7 @@ import {
 import { SearchableHeader } from "@/components/ui/SearchableHeader";
 import { PaginationClient } from "@/components/ui/PaginationClient";
 import { Plus, Trash2 } from "lucide-react";
+import { EyeIcon } from "@/components/icons";
 
 interface Announcement {
     id: number;
@@ -47,10 +48,16 @@ interface AnnouncementTableProps {
     setModalOpen: (open: boolean) => void;
 }
 
+interface PreviewState {
+    open: boolean;
+    announcement?: Announcement;
+}
+
 const AnnouncementTable: React.FC<AnnouncementTableProps> = ({ setModalOpen }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [search, setSearch] = useState("");
     const [announcements, setAnnouncements] = useState<Announcement[]>(mockData);
+    const [preview, setPreview] = useState<PreviewState>({ open: false });
 
     // Filter and paginate
     const filtered = announcements.filter(a =>
@@ -96,15 +103,26 @@ const AnnouncementTable: React.FC<AnnouncementTableProps> = ({ setModalOpen }) =
                                     ) : column.uid === "date" ? (
                                         <div className="text-sm text-default-600">{item.date}</div>
                                     ) : column.uid === "actions" ? (
-                                        <Button
-                                            isIconOnly
-                                            size="sm"
-                                            variant="light"
-                                            color="danger"
-                                            onPress={() => handleDelete(item.id)}
-                                        >
-                                            <Trash2 size={16} />
-                                        </Button>
+                                        <div className="flex gap-2">
+                                            <Button
+                                                isIconOnly
+                                                size="sm"
+                                                variant="light"
+                                                color="primary"
+                                                onPress={() => setPreview({ open: true, announcement: item })}
+                                            >
+                                                <EyeIcon className="w-4 h-4" />
+                                            </Button>
+                                            <Button
+                                                isIconOnly
+                                                size="sm"
+                                                variant="light"
+                                                color="danger"
+                                                onPress={() => handleDelete(item.id)}
+                                            >
+                                                <Trash2 size={16} />
+                                            </Button>
+                                        </div>
                                     ) : null}
                                 </TableCell>
                             ))}
@@ -118,6 +136,29 @@ const AnnouncementTable: React.FC<AnnouncementTableProps> = ({ setModalOpen }) =
                     currentPage={currentPage}
                 />
             </div>
+            {preview.open && preview.announcement && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30">
+                    <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-8 relative">
+                        <div className="flex flex-col items-center mb-4">
+                            <div className="bg-blue-100 rounded-full p-4 mb-2">
+                                <EyeIcon className="w-10 h-10" />
+                            </div>
+                            <h2 className="text-lg font-semibold">Announcement Preview</h2>
+                        </div>
+                        <div className="mb-4">
+                            <label className="block mb-1 font-medium">Title</label>
+                            <div className="w-full border rounded px-3 py-2 bg-gray-100">{preview.announcement.title}</div>
+                        </div>
+                        <div className="mb-4">
+                            <label className="block mb-1 font-medium">Message</label>
+                            <div className="w-full border rounded px-3 py-2 bg-gray-100">{preview.announcement.message}</div>
+                        </div>
+                        <div className="flex justify-end">
+                            <Button color="default" onPress={() => setPreview({ open: false })}>Close</Button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
