@@ -7,6 +7,7 @@ import { LoginSchema } from "@/schemas";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { API } from "@/lib/fetch";
+import { passwordSchema } from "@/schemas/login-schema";
 
 export const login = async ({
   username,
@@ -138,3 +139,23 @@ export const ResendCode = async (data: { session_id: string }) => {
     }
   }
 };
+export async function changePassword(data: z.infer<typeof passwordSchema>) {
+  try {
+    const validatedFields = passwordSchema.safeParse(data);
+    if (!validatedFields.success)
+      return { data: null, error: "Invalid Fields!" };
+    const { password, currentPassword: old_password } = validatedFields.data;
+    const { data: respData, error }: { error: any; data: any } = (await API.Put(
+      "user/password",
+      { password, old_password }
+    )) as { error: any; data: any };
+    console.log("🚀 ~ changePassword ~ respData:", respData)
+    if (error) {
+      return { data: respData, error };
+    } else {
+      return { data: respData, error: false };
+    }
+  } catch (error: any) {
+    throw new Error(error.message || "Something went wrong");
+  }
+}

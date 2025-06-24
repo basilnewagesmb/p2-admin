@@ -412,7 +412,7 @@ export default function Receipts({
           
           <div class="receipt-body">
             <div class="receipt-section">
-              <div class="section-title">Customer Information</div>
+              <div class="section-title">User Information</div>
               <div class="detail-row">
                 <span class="detail-label">Name:</span>
                 <span class="detail-value">${receipt.user.name}</span>
@@ -456,12 +456,12 @@ export default function Receipts({
             <p>Thank you for your business!</p>
             <div class="print-date">
               Printed on: ${new Date().toLocaleDateString("en-US", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-                hour: "2-digit",
-                minute: "2-digit",
-              })}
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    })}
             </div>
           </div>
         </div>
@@ -677,7 +677,7 @@ export default function Receipts({
                   <div className="grid grid-cols-2 gap-3 text-sm">
                     <div>
                       <span className="font-medium text-default-700">
-                        Customer:
+                        User:
                       </span>
                       <p className="text-foreground">
                         {selectedReceipt.user.name}

@@ -189,9 +189,11 @@ export function AppSidebar({ session }: any) {
                 className="w-[--radix-popper-anchor-width]"
               >
 
-                <DropdownMenuItem className="cursor-pointer  py-2">
-                  <span>Settings</span>
-                </DropdownMenuItem>
+                <Link href="/settings">
+                  <DropdownMenuItem className="cursor-pointer py-2">
+                    <span>Settings</span>
+                  </DropdownMenuItem>
+                </Link>
                 <DropdownMenuItem
                   onClick={appLlogout}
                   className="text-destructive focus:bg-destructive focus:text-destructive-foreground cursor-pointer  py-2"

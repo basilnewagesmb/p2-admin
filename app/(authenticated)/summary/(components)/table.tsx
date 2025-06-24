@@ -497,7 +497,7 @@ export default function SummeryTable() {
           
           <div class="receipt-body">
             <div class="receipt-section">
-              <div class="section-title">Customer Information</div>
+              <div class="section-title">User Information</div>
               <div class="detail-row">
                 <span class="detail-label">Name:</span>
                 <span class="detail-value">${receipt.user.name}</span>
@@ -979,7 +979,7 @@ export default function SummeryTable() {
                   <div className="grid grid-cols-2 gap-3 text-sm">
                     <div>
                       <span className="font-medium text-default-700">
-                        Customer:
+                        User:
                       </span>
                       <p className="text-foreground">
                         {selectedReceipt.user.name}
