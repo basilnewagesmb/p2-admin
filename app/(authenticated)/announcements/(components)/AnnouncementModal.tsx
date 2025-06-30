@@ -37,10 +37,11 @@ const AnnouncementModal: React.FC<AnnouncementModalProps> = ({ open, onClose }) 
                     />
                 </div>
                 <div className="mb-4">
-                    <label className="block mb-1 font-medium">Enter broadcast message <span className="text-xs text-gray-400">max 147 characters</span></label>
+
+                    <label className="block mb-1 font-medium">Enter broadcast message <span className="text-xs text-gray-400">max 500 characters</span></label>
                     <textarea
                         className="w-full border rounded px-3 py-2"
-                        maxLength={147}
+                        maxLength={500}
                         value={message}
                         onChange={e => setMessage(e.target.value)}
                         placeholder="Enter broadcast message"
