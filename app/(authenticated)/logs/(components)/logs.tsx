@@ -29,6 +29,7 @@ import {
 import { Button } from "@heroui/button";
 import { DateRangePickerComponent } from "@/components/ui/DateRangePicker";
 import { Download } from "lucide-react";
+import { Select, SelectItem } from "@heroui/select";
 
 interface ISearchParams {
   searchParams: {
@@ -240,17 +241,116 @@ export default function Logs({ detailPage = false }: { detailPage?: boolean }) {
     link.click();
     document.body.removeChild(link);
   };
+  const [selectedJobName, setSelectedJobName] = useState<string>("");
+
+  const receiptsData = [
+    {
+      id: 1,
+      jobName: "Tapville",
+      taskType: "Painting",
+      purpose: "Paint supplies for bathroom renovation",
+      date: "10 Jan 2025",
+      amount: "$85.00",
+      image:
+        "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=200&h=280&fit=crop",
+      user: {
+        name: "Sarah Mitchell",
+        email: "sarah.mitchell@example.com",
+        avatar: "https://i.pravatar.cc/150?img=47",
+      },
+    },
+    {
+      id: 2,
+      jobName: "Gristhouse",
+      taskType: "Drywall",
+      purpose: "Wall materials for interior finishing",
+      date: "09 Jan 2025",
+      amount: "$240.00",
+      image:
+        "https://images.unsplash.com/photo-1586953208448-b95a79798f07?w=200&h=280&fit=crop",
+      user: {
+        name: "Marcus Rodriguez",
+        email: "marcus.rodriguez@example.com",
+        avatar: "https://i.pravatar.cc/150?img=33",
+      },
+    },
+    {
+      id: 3,
+      jobName: "Edgewood Elementary",
+      taskType: "Demo",
+      purpose: "Demolition tools for classroom renovation",
+      date: "08 Jan 2025",
+      amount: "$156.00",
+      image:
+        "https://images.unsplash.com/photo-1586953208448-b95a79798f07?w=200&h=280&fit=crop",
+      user: {
+        name: "Emma Thompson",
+        email: "emma.thompson@example.com",
+        avatar: "https://i.pravatar.cc/150?img=28",
+      },
+    },
+    {
+      id: 4,
+      jobName: "4800",
+      taskType: "Plumbing",
+      purpose: "Plumbing fixtures for kitchen installation",
+      date: "07 Jan 2025",
+      amount: "$95.00",
+      image:
+        "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=200&h=280&fit=crop",
+      user: {
+        name: "David Chen",
+        email: "david.chen@example.com",
+        avatar: "https://i.pravatar.cc/150?img=15",
+      },
+    },
+    {
+      id: 5,
+      jobName: "Oakmont Houses",
+      taskType: "Painting",
+      purpose: "Exterior paint for house renovation",
+      date: "06 Jan 2025",
+      amount: "$67.50",
+      image:
+        "https://images.unsplash.com/photo-1586953208448-b95a79798f07?w=200&h=280&fit=crop",
+      user: {
+        name: "Olivia Johnson",
+        email: "olivia.johnson@example.com",
+        avatar: "https://i.pravatar.cc/150?img=41",
+      },
+    },
+  ];
+  const uniqueJobNames = Array.from(
+    new Set(receiptsData.map((receipt) => receipt.jobName))
+  );
 
   return (
     <div className={`flex flex-col gap-6 ${!detailPage && " px-4 "} py-4`}>
       {/* Search and Export Section */}
-      <div className="flex justify-between items-center gap-4">
+      <div className="flex justify-between items-end gap-4">
         {
           <DateRangePickerComponent
             name={!detailPage ? "All Log Entries" : ""}
           />
         }
-        <div className="flex items-center gap-4">
+        <div className="flex justify-between gap-4 w-[70%]">
+          <Select
+            label="Filter by Job Name"
+            selectedKeys={selectedJobName ? [selectedJobName] : []}
+            onChange={(e) => setSelectedJobName(e.target.value)}
+            size="sm"
+          >
+            <SelectItem key="" textValue="">
+              All Jobs
+            </SelectItem>
+            <>
+              {uniqueJobNames.map((jobName) => (
+                <SelectItem key={jobName} textValue={jobName}>
+                  {jobName}
+                </SelectItem>
+              ))}
+            </>
+          </Select>
           {!detailPage && (
             <div className="w-full max-w-xs">
               <Input
@@ -258,7 +358,6 @@ export default function Logs({ detailPage = false }: { detailPage?: boolean }) {
                 placeholder="Filter by username..."
                 value={usernameFilter}
                 onChange={(e) => setUsernameFilter(e.target.value)}
-                className="w-full"
                 size="lg"
               />
             </div>
